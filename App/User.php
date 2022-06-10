@@ -9,6 +9,7 @@
  *
  *  11 -> load error, id null
  *  12 -> load error, user not found
+ *  13 -> load error, users not found
  *
  *  21 -> save error, id null
  *  22 -> save error, sql execution
@@ -115,7 +116,7 @@ class User extends DB
         $userArray = [];
         $query = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
         if (!$query)
-            throw new Exception('User not found with this id: ' . $this->id, 12);
+            throw new Exception('Users not found.', 13);
         if ($query->rowCount()) {
             foreach ($query as $user) {
                 $newUser = new User();
