@@ -8,8 +8,9 @@
  *  003 -> validate error, mail regex
  *
  *  11 -> load error, id null
- *  12 -> load error, user not found
- *  13 -> load error, users not found
+ *  11 -> load error, id is not integer
+ *  13 -> load error, user not found
+ *  14 -> load error, users not found
  *
  *  21 -> save error, id null
  *  22 -> save error, failed to user saving
@@ -79,11 +80,13 @@ class User extends DB
     {
         if (is_null($userID))
             throw new Exception('userID is null', 11);
+        if (!is_int($userID))
+            throw new Exception('userID must be integer', 12);
         $user = $this->_db->prepare("SELECT * FROM user WHERE id =?");
         $user->execute([$userID]);
         $user = $user->fetch();
         if (!$user)
-            throw new Exception('User not found with this id: ' . $this->id, 12);
+            throw new Exception('User not found with this username: ' . $userID, 13);
         if (!is_null($user) && !empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
@@ -114,15 +117,52 @@ class User extends DB
             return $this;
         }
     }
+    public function loadUserWithUsername($username = null) {
+        if (is_null($username))
+            throw new Exception('userID is null', 11);
+        $user = $this->_db->prepare("SELECT * FROM user WHERE username =?");
+        $user->execute([$username]);
+        $user = $user->fetch();
+        if (!$user)
+            throw new Exception('User not found with this id: ' . $username, 12);
+        if (!is_null($user) && !empty($user)) {
+            $this->id = $user['id'];
+            $this->username = $user['username'];
+            $this->setUsername = $user['username'];
+            $this->name = $user['name'];
+            $this->setName = $user['name'];
+            $this->surname = $user['surname'];
+            $this->setSurname = $user['surname'];
+            $this->password = $user['password'];
+            $this->setPassword = $user['password'];
 
+            $this->status = $user['status'];
+            $this->setStatus = $user['status'];
+
+            $this->mail = $user['mail'];
+            $this->setMail = $user['mail'];
+            $this->phone = $user['phone'];
+            $this->setPhone = $user['phone'];
+            $this->identity = $user['identity'];
+            $this->setIdentity = $user['identity'];
+            $this->birthDate = $user['birth'];
+            $this->setBirthDate = $user['birth'];
+
+            $this->city = $user['city'];
+            $this->setCity = $user['city'];
+            $this->fullAddress = $user['address'];
+            $this->setFullAddress = $user['address'];
+            return $this;
+        }
+    }
     public function getAllUsers() //returns array or exception
     {
         $userArray = [];
-        $query = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
-        if (!$query)
-            throw new Exception('Users not found.', 13);
-        if ($query->rowCount()) {
-            foreach ($query as $user) {
+        $users = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
+        if (!$users)
+            throw new Exception('Users not found.', 14);
+        if ($users->rowCount()) {
+            foreach ($users as $user) {
                 $newUser = new User();
                 $newUser->id = $user['id'];
                 $newUser->username = $user['username'];
@@ -154,7 +194,45 @@ class User extends DB
         }
 
     }
+    public function getUsersWithSearch($search)
+    {
+        $userArray = [];
+        $users = $this->_db->prepare("SELECT * FROM user WHERE id = ? OR username LIKE ? ORDER BY id DESC");
+        $users->execute([$search,"%$search%"]);
+        if (!$users)
+            throw new Exception('Users not found.', 14);
+        if ($users->rowCount()) {
+            foreach ($users as $user) {
+                $newUser = new User();
+                $newUser->id = $user['id'];
+                $newUser->username = $user['username'];
+                $newUser->setUsername = $user['username'];
+                $newUser->name = $user['name'];
+                $newUser->setName = $user['name'];
+                $newUser->surname = $user['surname'];
+                $newUser->setSurname = $user['surname'];
+                $newUser->password = $user['password'];
+                $newUser->setPassword = $user['password'];
+                $newUser->status = $user['status'];
+                $newUser->setStatus = $user['status'];
+                $newUser->mail = $user['mail'];
+                $newUser->setMail = $user['mail'];
+                $newUser->phone = $user['phone'];
+                $newUser->setPhone = $user['phone'];
+                $newUser->identity = $user['identity'];
+                $newUser->setIdentity = $user['identity'];
+                $newUser->birthDate = $user['birth'];
+                $newUser->setBirthDate = $user['birth'];
+                $newUser->city = $user['city'];
+                $newUser->setCity = $user['city'];
+                $newUser->fullAddress = $user['address'];
+                $newUser->setFullAddress = $user['address'];
 
+                $userArray[$user['id']] = $newUser;
+            }
+            return $userArray;
+        }
+    }
     public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
     {
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
@@ -233,7 +311,7 @@ class User extends DB
     {
         if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
             throw new Exception('Username or password cannot be null.', 31);
-        $login = $this->_db->prepare("SELECT * FROM user WHERE BINARY username =?");
+        $login = $this->_db->prepare("SELECT * FROM user WHERE username =?");
         $login->execute([$username]);
         $login = $login->fetch();
         if (!$login)
