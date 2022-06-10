@@ -12,13 +12,14 @@
  *  13 -> load error, users not found
  *
  *  21 -> save error, id null
- *  22 -> save error, sql execution
+ *  22 -> save error, failed to user saving
  *
- *  31 -> login error, sql returned false
- *  32 -> login error, banned user
- *  33 -> login error, wrong password
+ *  31 -> login error, username or password null
+ *  32 -> login error, user not found
+ *  33 -> login error, banned user
+ *  34 -> login error, wrong password
  *
- *  41 -> register error, sql returned false
+ *  41 -> register error, failed to register
  *  42 -> register error, username or mail exist
  *
  *  51 -> change password, password check doesnt match
@@ -29,6 +30,7 @@
  */
 
 require_once 'DB.php';
+require_once 'define.php';
 
 class User extends DB
 {
@@ -72,7 +74,7 @@ class User extends DB
         parent::__construct();
     }
 
-    public function load($userID = null)
+    public function load($userID = null) //loads user from db. returns object or exception
     {
         if (is_null($userID))
             throw new Exception('userID is null', 11);
@@ -112,7 +114,7 @@ class User extends DB
         }
     }
 
-    public function getAllUsers() //returns array
+    public function getAllUsers() //returns array or exception
     {
         $userArray = [];
         $query = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
@@ -152,7 +154,7 @@ class User extends DB
 
     }
 
-    public function validateInputs()
+    public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
     {
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
             throw new Exception('Only letters and white space allowed on name.', 001);
@@ -164,7 +166,7 @@ class User extends DB
         return true;
     }
 
-    public function save()
+    public function save() //requires setUsername, setName, setSurname, setIdentity, setPhone, setBirthDate, setMail, setStatus, setCity, setFullAddress. returns true or exception
     {
         if ($this->id == null)
             throw new Exception('User ID cannot be null.', 21);
@@ -209,7 +211,7 @@ class User extends DB
             return false;
     }
 
-    public function changeAddress() //requires $this->setCity and $this->setFullAddress. returns true or false
+    public function changeAddress() //requires $this->setCity and $this->setFullAddress. returns true/false or exception
     {
         if ($this->setCity == $this->city && $this->setFullAddress == $this->fullAddress)
             throw new Exception('Same address fields.', 61);
@@ -226,30 +228,32 @@ class User extends DB
         $this->_db->prepare($sql)->execute([$this->id]);
     }
 
-    public function login($username, $password)
+    public function login($username, $password) //requires $username, $password. returns true or exception
     {
+        if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
+            throw new Exception('Username or password cannot be null.', 31);
         $login = $this->_db->prepare("SELECT * FROM user WHERE BINARY username =?");
         $login->execute([$username]);
         $login = $login->fetch();
         if (!$login)
-            throw new Exception('Login error.', 31);
-        if ($login['status'] == 0)
-            throw new Exception('Banned user.', 32);
+            throw new Exception('User not found.', 32);
+        if ($login['status'] == Banned)
+            throw new Exception('Banned user.', 33);
         $passwordCheck = password_verify($password, $login['password']);
         if (!$passwordCheck)
-            throw new Exception('Password doesnt match.', 33);
+            throw new Exception('Password doesnt match.', 34);
         if ($login && $login['status'] >= 1 && $passwordCheck) {
             return $login['id'];
         }
     }
 
-    public function register()
+    public function register() //requires setUsername, setName, setSurname, setIdentity, setPassword, setPhone, setBirthDate, setMail, setStatus. returns true or exception
     {
         $this->validateInputs();
         $this->setPassword = password_hash($this->setPassword, PASSWORD_DEFAULT);
 
         $exist = $this->_db->prepare("SELECT * FROM user WHERE username = ? OR mail = ?");
-        $exist->execute([$this->setUsername,$this->setMail]);
+        $exist->execute([$this->setUsername, $this->setMail]);
         $exist = $exist->fetch();
         if (!$exist) {
             $sql = "INSERT INTO user (username, name, surname, identity, password, phone, birth, mail, status) VALUES (?,?,?,?,?,?,?,?,?)";
@@ -257,9 +261,9 @@ class User extends DB
             if ($register)
                 return true;
             else
-                return throw new Exception('Failed to register.', 41);
+                throw new Exception('Failed to register.', 41);
         } else
-            return throw new Exception('Username or mail exist.', 42);
+            throw new Exception('Username or mail exist.', 42);
     }
 
     public function getID()
