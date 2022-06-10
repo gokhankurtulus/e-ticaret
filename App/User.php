@@ -66,6 +66,7 @@ class User extends DB
     public $setCity;
     public $setFullAddress;
 
+
     public function __construct()
     {
         parent::__construct();
@@ -111,7 +112,7 @@ class User extends DB
         }
     }
 
-    public function getAllUsers()
+    public function getAllUsers() //returns array
     {
         $userArray = [];
         $query = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
@@ -145,7 +146,6 @@ class User extends DB
                 $newUser->setFullAddress = $user['address'];
 
                 $userArray[$user['id']] = $newUser;
-                //array_push($userArray, $newUser);
             }
             return $userArray;
         }
