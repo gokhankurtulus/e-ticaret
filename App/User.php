@@ -8,12 +8,9 @@
  *  003 -> validate error, mail regex
  *
  *  11 -> load error, id null
- *  11 -> load error, id is not integer
- *  13 -> load error, user not found
- *  14 -> load error, users not found
- *  15 -> load error, username is not string
- *  16 -> load error, search parameter is null
- *  17 -> load error, search parameter is not string and integer
+ *  12 -> load error, user not found
+ *  13 -> load error, users not found
+ *  14 -> load error, search parameter is null
  *
  *  21 -> save error, id null
  *  22 -> save error, failed to user saving
@@ -83,13 +80,11 @@ class User extends DB
     {
         if (!isset($userID))
             throw new Exception('userID is null', 11);
-        if (!is_int($userID))
-            throw new Exception('userID must be integer', 12);
         $user = $this->_db->prepare("SELECT * FROM user WHERE id =?");
         $user->execute([$userID]);
         $user = $user->fetch();
         if (!$user)
-            throw new Exception('User not found with this username: ' . $userID, 13);
+            throw new Exception('User not found with this username: ' . $userID, 12);
         if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
@@ -126,8 +121,6 @@ class User extends DB
     {
         if (!isset($username))
             throw new Exception('username is null', 11);
-        if (!is_string($username))
-            throw new Exception('username must be string', 15);
         $user = $this->_db->prepare("SELECT * FROM user WHERE username =?");
         $user->execute([$username]);
         $user = $user->fetch();
@@ -170,7 +163,7 @@ class User extends DB
         $userArray = [];
         $users = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
         if (!$users)
-            throw new Exception('Users not found.', 14);
+            throw new Exception('Users not found.', 13);
         if ($users->rowCount()) {
             foreach ($users as $user) {
                 $newUser = new User();
@@ -208,14 +201,12 @@ class User extends DB
     public function getUsersWithSearch($search = null) //returns array or exception or false
     {
         if (!isset($search))
-            throw new Exception('search parameter is null', 16);
-        if (!is_int($search) && !is_string($search))
-            throw new Exception('search parameter must be integer or string', 17);
+            throw new Exception('search parameter is null', 14);
         $userArray = [];
         $users = $this->_db->prepare("SELECT * FROM user WHERE id = ? OR username LIKE ? ORDER BY id DESC");
         $users->execute([$search, "%$search%"]);
         if (!$users)
-            throw new Exception('Users not found.', 14);
+            throw new Exception('Users not found.', 13);
         if ($users->rowCount()) {
             foreach ($users as $user) {
                 $newUser = new User();
@@ -282,16 +273,16 @@ class User extends DB
                 mail=?,
                 phone=?,
                 identity=?,
-                birth=?,
-                city=?,
-                address=?
+                birth=?
                 WHERE
                 id=?";
-        $user = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setStatus, $this->setMail, $this->setPhone, $this->setIdentity, $this->setBirthDate, $this->setCity, $this->setFullAddress, $this->id]);
+        $user = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setStatus, $this->setMail, $this->setPhone, $this->setIdentity, $this->setBirthDate, $this->id]);
         if (!$user)
             throw new Exception('Failed to user saving.', 22);
-        else
+        else {
+            $this->load($this->id);
             return true;
+        }
     }
 
     public function changePassword() // requires $this->oldPassword, $this->setPassword, $this->setPasswordCheck. returns true or false
@@ -301,9 +292,10 @@ class User extends DB
         if (!password_verify($this->oldPassword, $this->password))
             throw new Exception('Wrong password.', 52);
         $sql = "UPDATE user SET password=? WHERE id=?";
-        if ($this->_db->prepare($sql)->execute([password_hash($this->setPassword, PASSWORD_DEFAULT), $this->id]))
+        if ($this->_db->prepare($sql)->execute([password_hash($this->setPassword, PASSWORD_DEFAULT), $this->id])) {
+            $this->load($this->id);
             return true;
-        else
+        } else
             return false;
     }
 
@@ -312,16 +304,20 @@ class User extends DB
         if ($this->setCity == $this->city && $this->setFullAddress == $this->fullAddress)
             throw new Exception('Same address fields.', 61);
         $sql = "UPDATE user SET city=?, address=? WHERE id=?";
-        if ($this->_db->prepare($sql)->execute([$this->setCity, $this->setFullAddress, $this->id]))
+        if ($this->_db->prepare($sql)->execute([$this->setCity, $this->setFullAddress, $this->id])) {
+            $this->load($this->id);
             return true;
-        else
+        } else
             return false;
     }
 
     public function delete()
     {
         $sql = "DELETE FROM user WHERE id =?";
-        $this->_db->prepare($sql)->execute([$this->id]);
+        if ($this->_db->prepare($sql)->execute([$this->id]))
+            return true;
+        else
+            return false;
     }
 
     public function login($username, $password) //requires $username, $password. returns id or false or exception
@@ -339,7 +335,8 @@ class User extends DB
         if (!$passwordCheck)
             throw new Exception('Password doesnt match.', 34);
         if ($login && $login['status'] >= 1 && $passwordCheck) {
-            return $login['id'];
+            $this->load($login['id']);
+            return true;
         }
         return false;
     }
