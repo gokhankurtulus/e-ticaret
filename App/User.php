@@ -192,7 +192,7 @@ class User extends DB
         if (!$user)
             throw new Exception('Failed to user saving.', 22);
         else
-            return $user;
+            return true;
     }
 
     public function changePassword() // requires $this->oldPassword, $this->setPassword, $this->setPasswordCheck. returns true or false
