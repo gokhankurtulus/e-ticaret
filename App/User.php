@@ -116,7 +116,7 @@ class User extends DB
         $userArray = [];
         $query = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
         if (!$query)
-            throw new Exception('Users not found.', 13);
+            throw new Exception('Users not found.', 14);
         if ($query->rowCount()) {
             foreach ($query as $user) {
                 $newUser = new User();
