@@ -1,1 +1,1 @@
-# e-ticaret
+# e-ticaret için kullanılabilir sınıf yapıları ve kullanım örnekleri
