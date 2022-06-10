@@ -79,7 +79,7 @@ class User extends DB
         parent::__construct();
     }
 
-    public function load($userID = null) //loads user from db. returns object or exception
+    public function load($userID = null) //loads user from db. returns object or exception or false
     {
         if (!isset($userID))
             throw new Exception('userID is null', 11);
@@ -119,8 +119,11 @@ class User extends DB
             $this->setFullAddress = $user['address'];
             return $this;
         }
+        return false;
     }
-    public function loadUserWithUsername($username = null) {
+
+    public function loadUserWithUsername($username = null) //loads user from db. returns object or exception or false
+    {
         if (!isset($username))
             throw new Exception('username is null', 11);
         if (!is_string($username))
@@ -159,8 +162,10 @@ class User extends DB
             $this->setFullAddress = $user['address'];
             return $this;
         }
+        return false;
     }
-    public function getAllUsers() //returns array or exception
+
+    public function getAllUsers() //returns array or exception or false
     {
         $userArray = [];
         $users = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
@@ -197,9 +202,10 @@ class User extends DB
             }
             return $userArray;
         }
-
+        return false;
     }
-    public function getUsersWithSearch($search = null)
+
+    public function getUsersWithSearch($search = null) //returns array or exception or false
     {
         if (!isset($search))
             throw new Exception('search parameter is null', 16);
@@ -207,7 +213,7 @@ class User extends DB
             throw new Exception('search parameter must be integer or string', 17);
         $userArray = [];
         $users = $this->_db->prepare("SELECT * FROM user WHERE id = ? OR username LIKE ? ORDER BY id DESC");
-        $users->execute([$search,"%$search%"]);
+        $users->execute([$search, "%$search%"]);
         if (!$users)
             throw new Exception('Users not found.', 14);
         if ($users->rowCount()) {
@@ -241,7 +247,9 @@ class User extends DB
             }
             return $userArray;
         }
+        return false;
     }
+
     public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
     {
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
@@ -316,7 +324,7 @@ class User extends DB
         $this->_db->prepare($sql)->execute([$this->id]);
     }
 
-    public function login($username, $password) //requires $username, $password. returns true or exception
+    public function login($username, $password) //requires $username, $password. returns id or false or exception
     {
         if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
             throw new Exception('Username or password cannot be null.', 31);
@@ -333,6 +341,7 @@ class User extends DB
         if ($login && $login['status'] >= 1 && $passwordCheck) {
             return $login['id'];
         }
+        return false;
     }
 
     public function register() //requires setUsername, setName, setSurname, setIdentity, setPassword, setPhone, setBirthDate, setMail, setStatus. returns true or exception
