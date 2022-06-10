@@ -84,7 +84,7 @@ class User extends DB
         $user->execute([$userID]);
         $user = $user->fetch();
         if (!$user)
-            throw new Exception('User not found with this username: ' . $userID, 12);
+            throw new Exception('User not found with this id: ' . $userID, 12);
         if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
@@ -125,7 +125,7 @@ class User extends DB
         $user->execute([$username]);
         $user = $user->fetch();
         if (!$user)
-            throw new Exception('User not found with this id: ' . $username, 12);
+            throw new Exception('User not found with this username: ' . $username, 12);
         if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
@@ -255,7 +255,7 @@ class User extends DB
 
     public function save() //requires setUsername, setName, setSurname, setIdentity, setPhone, setBirthDate, setMail, setStatus, setCity, setFullAddress. returns true or exception
     {
-        if ($this->id == null)
+        if (!isset($this->id))
             throw new Exception('User ID cannot be null.', 21);
         $this->validateInputs();
         if ($this->setUsername != $this->getUsername()) {
@@ -320,7 +320,7 @@ class User extends DB
             return false;
     }
 
-    public function login($username, $password) //requires $username, $password. returns id or false or exception
+    public function login($username, $password) //requires $username, $password. returns true/false or exception
     {
         if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
             throw new Exception('Username or password cannot be null.', 31);
