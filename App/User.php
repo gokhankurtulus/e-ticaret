@@ -11,6 +11,9 @@
  *  11 -> load error, id is not integer
  *  13 -> load error, user not found
  *  14 -> load error, users not found
+ *  15 -> load error, username is not string
+ *  16 -> load error, search parameter is null
+ *  17 -> load error, search parameter is not string and integer
  *
  *  21 -> save error, id null
  *  22 -> save error, failed to user saving
@@ -78,7 +81,7 @@ class User extends DB
 
     public function load($userID = null) //loads user from db. returns object or exception
     {
-        if (is_null($userID))
+        if (!isset($userID))
             throw new Exception('userID is null', 11);
         if (!is_int($userID))
             throw new Exception('userID must be integer', 12);
@@ -87,7 +90,7 @@ class User extends DB
         $user = $user->fetch();
         if (!$user)
             throw new Exception('User not found with this username: ' . $userID, 13);
-        if (!is_null($user) && !empty($user)) {
+        if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
             $this->setUsername = $user['username'];
@@ -118,14 +121,16 @@ class User extends DB
         }
     }
     public function loadUserWithUsername($username = null) {
-        if (is_null($username))
-            throw new Exception('userID is null', 11);
+        if (!isset($username))
+            throw new Exception('username is null', 11);
+        if (!is_string($username))
+            throw new Exception('username must be string', 15);
         $user = $this->_db->prepare("SELECT * FROM user WHERE username =?");
         $user->execute([$username]);
         $user = $user->fetch();
         if (!$user)
             throw new Exception('User not found with this id: ' . $username, 12);
-        if (!is_null($user) && !empty($user)) {
+        if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
             $this->setUsername = $user['username'];
@@ -194,8 +199,12 @@ class User extends DB
         }
 
     }
-    public function getUsersWithSearch($search)
+    public function getUsersWithSearch($search = null)
     {
+        if (!isset($search))
+            throw new Exception('search parameter is null', 16);
+        if (!is_int($search) && !is_string($search))
+            throw new Exception('search parameter must be integer or string', 17);
         $userArray = [];
         $users = $this->_db->prepare("SELECT * FROM user WHERE id = ? OR username LIKE ? ORDER BY id DESC");
         $users->execute([$search,"%$search%"]);
