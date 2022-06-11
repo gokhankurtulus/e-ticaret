@@ -6,6 +6,9 @@
  *  001 -> validate error, name regex
  *  002 -> validate error, surname regex
  *  003 -> validate error, mail regex
+ *  004 -> validate error, identity is not 11 character
+ *  005 -> validate error, identity wrong
+ *  006 -> validate error, identity check error
  *
  *  11 -> load error, id null
  *  12 -> load error, user not found
@@ -13,7 +16,8 @@
  *  14 -> load error, search parameter is null
  *
  *  21 -> save error, id null
- *  22 -> save error, failed to user saving
+ *  22 -> save error, username exist
+ *  23 -> save error, failed to user saving
  *
  *  31 -> login error, username or password null
  *  32 -> login error, user not found
@@ -48,6 +52,9 @@ class User extends DB
     private $phone;
     private $identity;
     private $birthDate;
+    private $birthDateDay;
+    private $birthDateMonth;
+    private $birthDateYear;
 
     private $city;
     private $fullAddress;
@@ -112,6 +119,8 @@ class User extends DB
             $this->setCity = $user['city'];
             $this->fullAddress = $user['address'];
             $this->setFullAddress = $user['address'];
+
+            $this->parseBirthDate($this);
             return $this;
         }
         return false;
@@ -153,6 +162,9 @@ class User extends DB
             $this->setCity = $user['city'];
             $this->fullAddress = $user['address'];
             $this->setFullAddress = $user['address'];
+
+            $this->parseBirthDate($this);
+
             return $this;
         }
         return false;
@@ -190,7 +202,7 @@ class User extends DB
                 $newUser->setCity = $user['city'];
                 $newUser->fullAddress = $user['address'];
                 $newUser->setFullAddress = $user['address'];
-
+                $this->parseBirthDate($newUser);
                 $userArray[$user['id']] = $newUser;
             }
             return $userArray;
@@ -233,7 +245,7 @@ class User extends DB
                 $newUser->setCity = $user['city'];
                 $newUser->fullAddress = $user['address'];
                 $newUser->setFullAddress = $user['address'];
-
+                $this->parseBirthDate($newUser);
                 $userArray[$user['id']] = $newUser;
             }
             return $userArray;
@@ -241,29 +253,16 @@ class User extends DB
         return false;
     }
 
-    public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
-    {
-        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
-            throw new Exception('Only letters and white space allowed on name.', 001);
-        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
-            throw new Exception('Only letters and white space allowed on surname.', 002);
-        if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
-            throw new Exception('Invalid email format: ' . $this->setMail, 003);
-
-        return true;
-    }
-
     public function save() //requires setUsername, setName, setSurname, setIdentity, setPhone, setBirthDate, setMail, setStatus, setCity, setFullAddress. returns true or exception
     {
         if (!isset($this->id))
             throw new Exception('User ID cannot be null.', 21);
-        $this->validateInputs();
         if ($this->setUsername != $this->getUsername()) {
             $checkExist = $this->_db->prepare("SELECT * FROM user WHERE username =?");
             $checkExist->execute([$this->setUsername]);
             $checkExist = $checkExist->fetch();
             if ($checkExist)
-                throw new Exception('username exist.', 23);
+                throw new Exception('username exist.', 22);
         }
         $sql = "UPDATE user SET 
                 username=?,
@@ -278,7 +277,7 @@ class User extends DB
                 id=?";
         $user = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setStatus, $this->setMail, $this->setPhone, $this->setIdentity, $this->setBirthDate, $this->id]);
         if (!$user)
-            throw new Exception('Failed to user saving.', 22);
+            throw new Exception('Failed to user saving.', 23);
         else {
             $this->load($this->id);
             return true;
@@ -343,7 +342,6 @@ class User extends DB
 
     public function register() //requires setUsername, setName, setSurname, setIdentity, setPassword, setPhone, setBirthDate, setMail, setStatus. returns true or exception
     {
-        $this->validateInputs();
         $this->setPassword = password_hash($this->setPassword, PASSWORD_DEFAULT);
 
         $exist = $this->_db->prepare("SELECT * FROM user WHERE username = ? OR mail = ?");
@@ -358,6 +356,57 @@ class User extends DB
                 throw new Exception('Failed to register.', 41);
         } else
             throw new Exception('Username or mail exist.', 42);
+    }
+
+    private function parseBirthDate($user)
+    {
+        $birthDateTime = new DateTime($user->birthDate);
+        $user->birthDateDay = $birthDateTime->format('d');
+        $user->birthDateMonth = $birthDateTime->format('m');
+        $user->birthDateYear = $birthDateTime->format('Y');
+    }
+
+    public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
+    {
+        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
+            throw new Exception('Only letters and white space allowed on name.', 001);
+        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
+            throw new Exception('Only letters and white space allowed on surname.', 002);
+        if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
+            throw new Exception('Invalid email format: ' . $this->setMail, 003);
+
+        return true;
+    }
+
+    private function turkishCharlowerToUpper($text)
+    {
+        $search = array("ç", "i", "ı", "ğ", "ö", "ş", "ü");
+        $replace = array("Ç", "İ", "I", "Ğ", "Ö", "Ş", "Ü");
+        $text = str_replace($search, $replace, $text);
+        $text = strtoupper($text);
+        return $text;
+    }
+
+    public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true/false or "err"
+    {
+        if (strlen($this->setIdentity) != 11)
+            throw new Exception('identity must be 11 character.', 004);
+        $client = new SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
+        try {
+            $result = $client->TCKimlikNoDogrula([
+                'TCKimlikNo' => $this->setIdentity,
+                'Ad' => $this->turkishCharlowerToUpper(trim($this->setName)),
+                'Soyad' => $this->turkishCharlowerToUpper(trim($this->setSurname)),
+                'DogumYili' => $this->birthDateYear
+            ]);
+            if ($result->TCKimlikNoDogrulaResult) {
+                return true;
+            } else {
+                throw new Exception('identity wrong.', 005);
+            }
+        } catch (Exception $e) {
+            throw new Exception('identity check error.', 006);
+        }
     }
 
     public function getID()
@@ -408,6 +457,21 @@ class User extends DB
     public function getBirthDate()
     {
         return $this->birthDate;
+    }
+
+    public function getBirthDateDay()
+    {
+        return $this->birthDateDay;
+    }
+
+    public function getBirthDateMonth()
+    {
+        return $this->birthDateMonth;
+    }
+
+    public function getBirthDateYear()
+    {
+        return $this->birthDateYear;
     }
 
     public function getCity()
