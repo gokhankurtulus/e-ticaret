@@ -104,8 +104,8 @@ User Roles
   <li>$allUsers = $userClass->getAllUsers();</li>
   <li>print_r($allUsers);</li>
   <br>
-  <li>$firstUserID = 15</li>
-  <li>$secondUserID = 16</li>
+  <li>$firstUserID = 15;</li>
+  <li>$secondUserID = 16;</li>
   <li>print_r($allUsers[$firstUserID]);</li>
   <li>echo $allUsers[$secondUserID]->getUsername();</li>
 </ul>
