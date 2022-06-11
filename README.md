@@ -54,14 +54,25 @@ User Roles
   <li>$user->load(28);</li>
   <li>$user->setName = "NewName";</li>
   <li>$user->setSurname = "NewSurname";</li>
+  <li>if($user->validateInputs() && $user->validateIdentity())</li>
   <li>if($user->save())</li>
   <li>#do something</li>
   <br>
   <li>$anotherUser = new User();</li>
   <li>$anotherUser->load(29);</li>
+  <li>$anotherUser->setUsername = "newUsername";</li>
   <li>$anotherUser->setMail = "new@mail.com";</li>
+  <li>if($user->validateInputs() && $user->validateIdentity())</li>
   <li>$anotherUser->save();</li>
+  <li>echo $anotherUser->getUsername();</li>
   <li>echo $anotherUser->getMail();</li>
+  <br>
+  <li>$user2 = new User();</li>
+  <li>$user2->load(29);</li>
+  <li>$user2->setIdentity = "11111111111";</li>
+  <li>if($user->validateInputs() && $user->validateIdentity())</li>
+  <li>$user2->save();</li>
+  <li>echo $user->getIdentity();</li>
 </ul>
 <h3 align="left">Delete</h3>
 <ul>
@@ -115,6 +126,7 @@ User Roles
   <li>$allUsers = $userClass->getAllUsers();</li>
   <li>echo $allUsers[22]->getUsername();</li>
   <li>$allUsers[22]->setUsername = "youcansetuservalues";</li>
+  <li>if($allUsers[22]->validateInputs() && $allUsers[22]->validateIdentity())</li>
   <li>$allUsers[22]->save();</li>
   <li>echo $allUsers[22]->getUsername();</li>
 </ul>
