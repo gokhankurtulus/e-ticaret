@@ -7,9 +7,12 @@
  *  002 -> validate error, name regex
  *  003 -> validate error, surname regex
  *  004 -> validate error, mail regex
- *  005 -> validate error, identity is not 11 character
- *  006 -> validate error, identity wrong
- *  007 -> validate error, identity check error
+ *  005 -> validate error, username must be 6-20 char
+ *  006 -> validate error, name must be 2-20 char
+ *  007 -> validate error, surname must be 2-20 char
+ *  101 -> validate error, identity is not 11 character
+ *  102 -> validate error, identity wrong
+ *  103 -> validate error, identity check error
  *
  *  11 -> load error, id null
  *  12 -> load error, user not found
@@ -276,16 +279,16 @@ class User extends DB
             $sql = "INSERT INTO user (username, name, surname, identity, password, phone, birth, mail, status) VALUES (?,?,?,?,?,?,?,?,?)";
             $register = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setIdentity, $this->setPassword, $this->setPhone, $this->setBirthDate, $this->setMail, $this->setStatus]);
             if ($register)
-                return true;
+                return $this->_db->lastInsertId();
             else
                 throw new Exception('Failed to register.', 41);
         } else
             throw new Exception('Username or mail exist.', 42);
     }
 
-    private function parseBirthDate()
+    public function parseBirthDate()
     {
-        $birthDateTime = new DateTime($this->birthDate);
+        $birthDateTime = new DateTime($this->setBirthDate);
         $this->birthDateDay = $birthDateTime->format('d');
         $this->birthDateMonth = $birthDateTime->format('m');
         $this->birthDateYear = $birthDateTime->format('Y');
@@ -301,6 +304,12 @@ class User extends DB
             throw new Exception('Only letters and white space allowed on surname.', 003);
         if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
             throw new Exception('Invalid email format: ' . $this->setMail, 004);
+        if (!(strlen($this->setUsername) >= 6 && strlen($this->setUsername) <= 20))
+            throw new Exception('Username must be 6-20 character long.', 005);
+        if (!(strlen($this->setName) >= 2 && strlen($this->setName) <= 20))
+            throw new Exception('Name must be 2-20 character long.', 006);
+        if (!(strlen($this->setSurname) >= 2 && strlen($this->setSurname) <= 20))
+            throw new Exception('Surname must be 2-20 character long.', 007);
 
         return true;
     }
@@ -309,7 +318,7 @@ class User extends DB
     public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true/false or "err"
     {
         if (strlen($this->setIdentity) != 11)
-            throw new Exception('identity must be 11 character.', 005);
+            throw new Exception('identity must be 11 character.', 101);
         $client = new SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
         try {
             $result = $client->TCKimlikNoDogrula([
@@ -321,10 +330,10 @@ class User extends DB
             if ($result->TCKimlikNoDogrulaResult) {
                 return true;
             } else {
-                throw new Exception('identity wrong.', 006);
+                throw new Exception('identity wrong.', 102);
             }
         } catch (Exception $e) {
-            throw new Exception('identity check error.', 007);
+            throw new Exception('identity check error.', 103);
         }
     }
 

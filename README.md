@@ -10,6 +10,11 @@
 <img onclick="return false;" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" alt="css" width="40" height="40" title="CSS"/>
 </p>
 <ul>
+  <li>jQuery v3.5.1</li>
+  <li>jQuery UI - v1.12.1</li>
+  <li>SOAP</li>
+</ul>
+<ul>
   <li><a href="https://github.com/gokhankurtulus/e-ticaret#user-class">User Class</a></li>
   <li><a href="https://github.com/gokhankurtulus/e-ticaret#product-class">Product Class</a></li>
 </ul>
