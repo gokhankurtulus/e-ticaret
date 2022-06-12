@@ -251,8 +251,8 @@ class Product extends DB
 
     public function createSlug($str, $delimiter = '-')
     {
-        $turkish = array("ı", "İ", "ğ", "Ğ", "ü", "Ü", "ş", "Ş", "ö", "Ö", "ç", "Ç");//turkish letters
-        $english = array("i", "I", "g", "G", "u", "U", "s", "S", "o", "O", "c", "C");//english cooridinators letters
+        $turkish = array("ı", "İ", "ğ", "Ğ", "ü", "Ü", "ş", "Ş", "ö", "Ö", "ç", "Ç");
+        $english = array("i", "I", "g", "G", "u", "U", "s", "S", "o", "O", "c", "C");
         $str = str_replace($turkish, $english, $str);
         $str = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))))), $delimiter));
         return $str;
