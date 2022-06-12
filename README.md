@@ -32,26 +32,26 @@ User Roles
 <h3 align="left">Register</h3>
 <pre>
 <code>
-$user = new User();
-$user->setUsername = "username";
-$user->setName = "Name";
-$user->setSurname = "Surname";
-$user->setPassword = "passw0rd";
-$user->setStatus = User;
-$user->setMail = "user@mail.com";
-$user->setPhone = "(123) 456 - 7890";
-$user->setIdentity = "11111111111";
-$user->setBirthDate = "YYYY-MM-DD";
-if ($user->register())
-#do something
+  $user = new User();
+  $user->setUsername = "username";
+  $user->setName = "Name";
+  $user->setSurname = "Surname";
+  $user->setPassword = "passw0rd";
+  $user->setStatus = User;
+  $user->setMail = "user@mail.com";
+  $user->setPhone = "(123) 456 - 7890";
+  $user->setIdentity = "11111111111";
+  $user->setBirthDate = "YYYY-MM-DD";
+  if ($user->register())
+    #do something
 </code>
 </pre>
 <h3 align="left">Login</h3>
 <pre>
 <code>
-$userForLogin = new User();
-if ($userForLogin->login('username', 'passw0rd'))
-  echo $userForLogin->getID();
+  $userForLogin = new User();
+  if ($userForLogin->login('username', 'passw0rd'))
+    echo $userForLogin->getID();
 </code>
 </pre>
 <h3 align="left">Load</h3>
