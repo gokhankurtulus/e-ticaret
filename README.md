@@ -1,8 +1,15 @@
 # Class structure and usage examples for e-commerce
 
 <h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://www.php.net" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="php" width="40" height="40"/> </a> </p>
-
+<p align="left">
+<a href="https://www.php.net" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="php" width="40" height="40"/> </a> 
+<a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/></a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/></a>
+</p>
+<ul>
+  <li><a href="https://github.com/gokhankurtulus/e-ticaret#user-class">User Class</a></li>
+  <li><a href="https://github.com/gokhankurtulus/e-ticaret#product-class">Product Class</a></li>
+</ul>
 <h3 align="left">define.php</h3>
 User Roles
 <ul>
@@ -149,7 +156,6 @@ User Roles
   <li>getBirthDateYear() - Returns user's birthdate (Year).</li>
   <li>getCity() - Returns user's city.</li>
   <li>getFullAddress() - Returns user's fullAddress.</li>
-  <li></li>
 </ul>
 <h2 align="left">Product Class</h2>
 <h3 align="left">Create</h3>
@@ -253,5 +259,4 @@ User Roles
   <li>getImage2() - Returns product's image2.</li>
   <li>getImage2() - Returns product's image3.</li>
   <li>getUploadDate() - Returns product's uploadDate.</li>
-  <li></li>
 </ul>
