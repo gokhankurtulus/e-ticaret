@@ -1,3 +1,15 @@
+<?php
+require_once "App/User.php";
+session_start();
+//unset($_SESSION['login']);
+if (isset($_SESSION['login'])):
+    $loginedUser = new User();
+    $loginedUser->load($_SESSION['login']);
+    echo '<pre>';
+    print_r($loginedUser);
+    echo '</pre>';
+endif;
+?>
 <link rel="stylesheet" href="assets/css/jquery-ui.css">
 <form id="registerForm" name="register" method="post">
     <input type="text" name="rgsUsername" onkeypress="blockChars(this);" pattern=".{6,20}" title="6-20 karakter arasında olmalı"
