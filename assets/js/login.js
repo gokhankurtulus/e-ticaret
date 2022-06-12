@@ -55,10 +55,13 @@ function blockChars(elem, lang = 'en') {
     if (lang === 'en')
         regex = new RegExp("^[a-zA-Z]+$");
     if (lang === 'tr')
-        regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ]+$");
+        regex = new RegExp("^[a-zA-ZığüşöçĞÜŞÖÇİ ]+$");
     if (lang === 'pw')
         //regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ!@#$%&*+-]+$");
         regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ.,:;!'&()=?_><|£#${}\[\\]\\\\*%/+-]+$");
+    if (lang === 'phone')
+        //regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ!@#$%&*+-]+$");
+        regex = new RegExp("^[0-9]+$");
     var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
 
     if (!regex.test(key) && event.keyCode !== 13) {
@@ -67,32 +70,94 @@ function blockChars(elem, lang = 'en') {
     }
 }
 
+$(function () {
+    $("#datepicker").datepicker({
+        minDate: '-100Y',
+        maxDate: '0',
+        changeYear: true,
+        changeMonth: true,
+        yearRange: "-100:+100",
+        firstDay: 1
+    });
+});
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 // Bind to the submit event of our form
+let registerForm = "#registerForm";
 let loginForm = "#loginForm";
 let loader = "#loader";
-let ajaxUrI = "testAJAX.php";
+let errorMsg = "#errorMsg";
+let successMsg = "#successMsg";
+let loginRegisterUrI = "testAJAX.php";
 if ($(loginForm).length) {
     $(loginForm).submit(function (event) {
         event.preventDefault();
-        //$(loader).css("display","block");
+        $(loader).css("display", "block");
         var values = $(this).serialize();
-
         $.ajax({
-            url: ajaxUrI,
+            url: loginRegisterUrI,
             type: "post",
             data: values,
             success: function (response) {
-                //$(loader).css("display","none");
-                document.location.reload(true);
+                if (isJsonString(response)) {
+                    response = $.parseJSON(response);
+                    $(successMsg).text("Logged in.");
+                    $(successMsg).css("display", "block");
+                    document.location.reload(true);
+                } else {
+                    $(errorMsg).text(response);
+                    $(errorMsg).css("display", "block");
+                }
+                $(loader).css("display", "none");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
             }
         }).done(function (data) {
-            console.log(data)
+            //console.log(data)
         });
     });
 }
+if ($(registerForm).length) {
+    $(registerForm).submit(function (event) {
+        event.preventDefault();
+        $(loader).css("display", "block");
+        var values = $(this).serialize();
+
+        $.ajax({
+            url: loginRegisterUrI,
+            type: "post",
+            data: values,
+            success: function (response) {
+                if (isJsonString(response)) {
+                    response = $.parseJSON(response);
+                    $(successMsg).text("Successfuly registered.");
+                    $(successMsg).css("display", "block");
+                    $(errorMsg).css("display", "none");
+                } else {
+                    $(errorMsg).text(response);
+                    $(errorMsg).css("display", "block");
+                    $(successMsg).css("display", "none");
+                }
+                $(loader).css("display", "none");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        }).done(function (data) {
+            //console.log(data)
+        });
+    });
+}
+
 
 if (window.history.replaceState) {
 
