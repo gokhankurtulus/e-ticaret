@@ -21,8 +21,10 @@
            autocomplete="off"
            placeholder="Telefon (123) 456 - 7890" required>
     <input type="text" id="datepicker" name="rgsBirth" autocomplete="off" placeholder="Doğum Günü" required>
-    <input type="checkbox" id="_checkbox" value="1" required>
-    <label for="_checkbox"><a target="_blank" href="terms">Kullanıcı sözleşmesini okudum, onaylıyorum</a></label>
+    <label>
+        <input type="checkbox" id="_checkbox" value="1" required>
+        <a target="_blank" href="terms">Kullanıcı sözleşmesini okudum, onaylıyorum</a>
+    </label>
     <input type="submit" name="rgs" value="Üye Ol">
 </form>
 <p id="successMsg" style="display: none;"></p>
