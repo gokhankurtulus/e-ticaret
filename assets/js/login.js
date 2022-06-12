@@ -49,12 +49,16 @@ if (inputElement) {
     inputElement.addEventListener('keydown', enforceFormat);
     inputElement.addEventListener('keyup', formatToPhone);
 }
+
 function blockChars(elem, lang = 'en') {
     let regex;
-    if (lang === 'tr')
-        regex = new RegExp("^[\\wığüşöçĞÜŞÖÇİ]+$");
     if (lang === 'en')
-        regex = new RegExp("^[a-zA-Z0-9]+$");
+        regex = new RegExp("^[a-zA-Z]+$");
+    if (lang === 'tr')
+        regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ]+$");
+    if (lang === 'pw')
+        //regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ!@#$%&*+-]+$");
+        regex = new RegExp("^[a-zA-Z0-9ığüşöçĞÜŞÖÇİ.,:;!'&()=?_><|£#${}\[\\]\\\\*%/+-]+$");
     var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
 
     if (!regex.test(key) && event.keyCode !== 13) {
@@ -62,6 +66,34 @@ function blockChars(elem, lang = 'en') {
         return false;
     }
 }
+
+// Bind to the submit event of our form
+let loginForm = "#loginForm";
+let loader = "#loader";
+let ajaxUrI = "testAJAX.php";
+if ($(loginForm).length) {
+    $(loginForm).submit(function (event) {
+        event.preventDefault();
+        //$(loader).css("display","block");
+        var values = $(this).serialize();
+
+        $.ajax({
+            url: ajaxUrI,
+            type: "post",
+            data: values,
+            success: function (response) {
+                //$(loader).css("display","none");
+                document.location.reload(true);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        }).done(function (data) {
+            console.log(data)
+        });
+    });
+}
+
 if (window.history.replaceState) {
 
     window.history.replaceState(null, null, window.location.href);
