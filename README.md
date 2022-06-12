@@ -4,7 +4,7 @@
 <p align="left"> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://www.php.net" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="php" width="40" height="40"/> </a> </p>
 
 <h3 align="left">define.php</h3>
-User Roles 
+User Roles
 <ul>
   <li>define('Banned', 0);</li>
   <li>define('User', 1);</li>
@@ -72,7 +72,7 @@ User Roles
   <li>$user2->setIdentity = "11111111111";</li>
   <li>if($user->validateInputs() && $user->validateIdentity())</li>
   <li>$user2->save();</li>
-  <li>echo $user->getIdentity();</li>
+  <li>echo $user2->getIdentity();</li>
 </ul>
 <h3 align="left">Delete</h3>
 <ul>
@@ -124,9 +124,134 @@ User Roles
 <ul>
   <li>$userClass = new User();</li>
   <li>$allUsers = $userClass->getAllUsers();</li>
-  <li>echo $allUsers[22]->getUsername();</li>
   <li>$allUsers[22]->setUsername = "youcansetuservalues";</li>
   <li>if($allUsers[22]->validateInputs() && $allUsers[22]->validateIdentity())</li>
   <li>$allUsers[22]->save();</li>
   <li>echo $allUsers[22]->getUsername();</li>
+</ul>
+<h3 align="left">Functions</h3>
+<ul>
+  <li>parseBirthDate() - Parse loaded user's birthDate to birthDateDay, birthDateMonth, birthDateYear.</li>
+  <li>validateInputs() - Requires setName, setSurname, setMail. Returns true or exception.</li>
+  <li>validateIdentity() - Validates T.C citizens identity from tckimlik.nvi.gov.tr. Requires setName, setSurname, setIdentity, birthDateYear. returns true/false or "err".</li>
+  <li>getID() - Returns user's id.</li>
+  <li>getUsername() - Returns user's username.</li>
+  <li>getName() - Returns user's name.</li>
+  <li>getSurname() - Returns user's surname.</li>
+  <li>getPassword() - Returns user's password.</li>
+  <li>getStatus() - Returns user's status.</li>
+  <li>getMail() - Returns user's mail.</li>
+  <li>getPhone() - Returns user's phone.</li>
+  <li>getIdentity() - Returns user's identity.</li>
+  <li>getBirthDate() - Returns user's birthdate.</li>
+  <li>getBirthDateDay() - Returns user's birthdate (Day).</li>
+  <li>getBirthDateMonth() - Returns user's birthdate (Month).</li>
+  <li>getBirthDateYear() - Returns user's birthdate (Year).</li>
+  <li>getCity() - Returns user's city.</li>
+  <li>getFullAddress() - Returns user's fullAddress.</li>
+  <li></li>
+</ul>
+<h2 align="left">Product Class</h2>
+<h3 align="left">Create</h3>
+<ul>
+  <li>$product = new Product();</li>
+  <li>$product->setName = 'Best Product';</li>
+  <li>$product->setDescription = 'test desc';</li>
+  <li>$product->setCode = $product->generateProductCode('TST');</li>
+  <li>$product->setSlug = $product->createSlug($product->setName . '-' . $product->setCode);</li>
+  <li>$product->setStatus = 0;</li>
+  <li>$product->setShowSize = 0;</li>
+  <li>$product->setPage = '1';</li>
+  <li>$product->setCategory = '2';</li>
+  <li>$product->setSubCategory = '3';</li>
+  <li>$product->setPrice = '14.99';</li>
+  <li>$product->setDiscount = '0';</li>
+  <li>$product->setDiscountedPrice = '14.99';</li>
+  <li>$product->setImage1 = 'image1.jpg';</li>
+  <li>$product->setImage2 = 'image2.jpg';</li>
+  <li>$product->setImage3 = 'image3.jpg';</li>
+  <li>$productID = $product->create(); //returns lastInsertId when successfully insert</li>
+  <li>if ($productID)</li>
+  <li>#do something</li>
+</ul>
+<h3 align="left">Load</h3>
+<ul>
+  <li>$productID = 135;</li>
+  <li>$product = new Product();</li>
+  <li>$product->load($userID);</li>
+  <li>echo $product->getName();</li>
+</ul>
+<h3 align="left">Load With Url</h3>
+<ul>
+  <li>$slug = "basic-oversize-t-shirt-bs-859728";</li>
+  <li>$product = new Product();</li>
+  <li>$product->loadWithUrl($slug);</li>
+  <li>echo $product->getPrice();</li>
+</ul>
+<h3 align="left">Save</h3>
+<ul>
+  <li>$product = new Product();</li>
+  <li>$product->load(11129);</li>
+  <li>$product->setName = 'New Product Name';</li>
+  <li>$product->setSlug = $product->createSlug($product->setName . '-' . $product->setCode);</li>
+  <li>$product->save();</li>
+</ul>
+<h3 align="left">Delete</h3>
+<ul>
+  <li>$product = new Product();</li>
+  <li>$product->load(82354);</li>
+  <li>if ($product->delete())</li>
+  <li>echo 'product deleted.';</li>
+</ul>
+<h3 align="left">Get Products With Search</h3>
+<ul>
+  <li>$productClass = new Product();</li>
+  <li>$searchResult = $productClass->getProductsWithSearch('t-shirt');</li>
+  <li>print_r($searchResult);</li>
+</ul>
+<h3 align="left">Get All Products</h3>
+<ul>
+  <li>$productClass = new Product();</li>
+  <li>$allProducts = $productClass->getAllProducts();</li>
+  <li>print_r($allProducts);</li>
+  <br>
+  <li>$firstProductID = 1234;</li>
+  <li>$secondProductID = 9876;</li>
+  <li>print_r($allProducts[$firstProductID]);</li>
+  <li>echo $allProducts[$secondProductID]->getPrice();</li>
+</ul>
+
+<h3 align="left">Set product data in array</h3>
+<ul>
+  <li>$productClass = new Product();</li>
+  <li>$allProducts = $productClass->getAllProducts();</li>
+  <li>$allProducts[11126]->setName = "youcansetproductvalues";</li>
+  <li>$allProducts[11126]->setSlug = $allProducts[11126]->createSlug($allProducts[11126]->setName . '-' . $allProducts[11126]->setCode);</li>
+  <li>$allProducts[11126]->save();</li>
+  <li>echo $allProducts[11126]->getSlug();</li>
+</ul>
+
+<h3 align="left">Functions</h3>
+<ul>
+  <li>generateProductCode($code_start) - Requires code_start. Generates product code like TEST-123456</li>
+  <li>createSlug($str, $delimiter = '-') - Requires str and delimiter. Generates SEO-Friendly slug.</li>
+  <li>getID() - Returns product's id.</li>
+  <li>getName() - Returns product's name.</li>
+  <li>getCode() - Returns product's code.</li>
+  <li>getSlug() - Returns product's slug.</li>
+  <li>getDescription() - Returns product's description.</li>
+  <li>getStatus() - Returns product's status.</li>
+  <li>getShowSize() - Returns product's showSize. If product has one size showSize = 0, if product has more than one size showSize = 1.</li>
+  <li>getPage() - Returns product's page.</li>
+  <li>getCategory() - Returns product's category.</li>
+  <li>getSubCategory() - Returns product's subcategory.</li>
+  <li>getCategory() - Returns product's category.</li>
+  <li>getDiscount() - Returns product's discount.</li>
+  <li>getPrice() - Returns product's price.</li>
+  <li>getDiscountedPrice() - Returns product's discountedPrice.</li>
+  <li>getImage1() - Returns product's image1.</li>
+  <li>getImage2() - Returns product's image2.</li>
+  <li>getImage2() - Returns product's image3.</li>
+  <li>getUploadDate() - Returns product's uploadDate.</li>
+  <li></li>
 </ul>
