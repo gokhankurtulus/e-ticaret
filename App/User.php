@@ -315,7 +315,7 @@ class User extends DB
     }
 
 
-    public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true/false or "err"
+    public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true or exception
     {
         if (strlen($this->setIdentity) != 11)
             throw new Exception('identity must be 11 character.', 101);
