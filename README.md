@@ -30,120 +30,147 @@ User Roles
 </ul>
 <h2 align="left">User Class</h2>
 <h3 align="left">Register</h3>
-<ul>
-  <li>$user = new User();</li>
-  <li>$user->setUsername = "username";</li>
-  <li>$user->setName = "Name";</li>
-  <li>$user->setSurname = "Surname";</li>
-  <li>$user->setPassword = "passw0rd";</li>
-  <li>$user->setStatus = User;</li>
-  <li>$user->setMail = "user@mail.com";</li>
-  <li>$user->setPhone = "(123) 456 - 7890";</li>
-  <li>$user->setIdentity = "11111111111";</li>
-  <li>$user->setBirthDate = "YYYY-MM-DD";</li>
-  <li>if ($user->register())</li>
-  <li>#do something</li>
-</ul>
+<pre>
+<code>
+$user = new User();
+$user->setUsername = "username";
+$user->setName = "Name";
+$user->setSurname = "Surname";
+$user->setPassword = "passw0rd";
+$user->setStatus = User;
+$user->setMail = "user@mail.com";
+$user->setPhone = "(123) 456 - 7890";
+$user->setIdentity = "11111111111";
+$user->setBirthDate = "YYYY-MM-DD";
+if ($user->register())
+#do something
+</code>
+</pre>
 <h3 align="left">Login</h3>
-<ul>
-  <li>$userForLogin = new User();</li>
-  <li>if ($userForLogin->login('username', 'passw0rd'))</li>
-  <li>echo $userForLogin->getID();</li>
-</ul>
+<pre>
+<code>
+$userForLogin = new User();
+if ($userForLogin->login('username', 'passw0rd'))
+  echo $userForLogin->getID();
+</code>
+</pre>
 <h3 align="left">Load</h3>
-<ul>
-  <li>$userID = 14;</li>
-  <li>$user = new User();</li>
-  <li>$user->load($userID);</li>
-  <li>echo $user->getName();</li>
-</ul>
+<pre>
+<code>
+  $userID = 14;
+  $user = new User();
+  $user->load($userID);
+  echo $user->getName();
+</code>
+</pre>
 <h3 align="left">Load With Username</h3>
-<ul>
-  <li>$user = new User();</li>
-  <li>$user->loadUserWithUsername('username');</li>
-  <li>echo $user->getMail();</li>
-</ul>
+<pre>
+<code>
+  $user = new User();
+  $user->loadUserWithUsername('username');
+  echo $user->getMail();</li>
+</code>
+</pre>
 <h3 align="left">Save</h3>
-<ul>
-  <li>$user = new User();</li>
-  <li>$user->load(28);</li>
-  <li>$user->setName = "NewName";</li>
-  <li>$user->setSurname = "NewSurname";</li>
-  <li>if($user->validateInputs() && $user->validateIdentity())</li>
-  <li>if($user->save())</li>
-  <li>#do something</li>
-  <br>
-  <li>$anotherUser = new User();</li>
-  <li>$anotherUser->load(29);</li>
-  <li>$anotherUser->setUsername = "newUsername";</li>
-  <li>$anotherUser->setMail = "new@mail.com";</li>
-  <li>if($user->validateInputs() && $user->validateIdentity())</li>
-  <li>$anotherUser->save();</li>
-  <li>echo $anotherUser->getUsername();</li>
-  <li>echo $anotherUser->getMail();</li>
-  <br>
-  <li>$user2 = new User();</li>
-  <li>$user2->load(29);</li>
-  <li>$user2->setIdentity = "11111111111";</li>
-  <li>if($user->validateInputs() && $user->validateIdentity())</li>
-  <li>$user2->save();</li>
-  <li>echo $user2->getIdentity();</li>
-</ul>
+<pre>
+<code>
+  $user = new User();
+  $user->load(28);
+  $user->setName = "NewName";
+  $user->setSurname = "NewSurname";
+  if($user->validateInputs())
+    if($user->save())
+      #do something
+</code>
+</pre>
+<pre>
+<code>
+  $anotherUser = new User();
+  $anotherUser->load(29);
+  $anotherUser->setUsername = "newUsername";
+  $anotherUser->setMail = "new@mail.com";
+  if($anotherUser->validateInputs())
+    $anotherUser->save();
+  echo $anotherUser->getUsername();
+  echo $anotherUser->getMail();
+</code>
+</pre>
+<pre>
+<code>
+  $user2 = new User();
+  $user2->load(29);
+  $user2->setIdentity = "11111111111";
+  if($user2->validateInputs() && $user2->validateIdentity())
+    $user2->save();
+  echo $user2->getIdentity();
+</code>
+</pre>
 <h3 align="left">Delete</h3>
-<ul>
-  <li>$user = new User();</li>
-  <li>$user->load(8);</li>
-  <li>if ($user->delete())</li>
-  <li>echo 'user deleted.';</li>
-</ul>
+<pre>
+<code>
+  $user = new User();
+  $user->load(8);
+  if ($user->delete())
+    echo 'user deleted.';
+</code>
+</pre>
 <h3 align="left">Change Password</h3>
-<ul>
-  <li>$user = new User();</li>
-  <li>$user->load(12);</li>
-  <li>$user->setPassword = "newPassw0rd";</li>
-  <li>$user->setPasswordCheck = "newPassw0rd";</li>
-  <li>$user->oldPassword = "passw0rd";</li>
-  <li>if($user->changePassword())</li>
-  <li>#do something</li>
-</ul>
+<pre>
+<code>
+  $user = new User();
+  $user->load(12);
+  $user->setPassword = "newPassw0rd";
+  $user->setPasswordCheck = "newPassw0rd";
+  $user->oldPassword = "passw0rd";
+  if($user->changePassword())
+    #do something
+</code>
+</pre>
 <h3 align="left">Change Address</h3>
-<ul>
-  <li>$user = new User();</li>
-  <li>$user->load(17);</li>
-  <li>$user->setCity = 34;</li>
-  <li>$user->setFullAddress = "Full address here";</li>
-  <li>if($user->changeAddress())</li>
-  <li>#do something</li>
-</ul>
+<pre>
+<code>
+  $user = new User();
+  $user->load(17);
+  $user->setCity = 34;
+  $user->setFullAddress = "Full address here";
+  if($user->changeAddress())
+    #do something
+</code>
+</pre>
 <h3 align="left">Get Users With Search</h3>
-<ul>
-  <li>$userID = 24;</li>
-  <li>$userClass = new User();</li>
-  <li>$searchResult =$userClass->getUsersWithSearch('userna');</li>
-  <li>//print_r($searchResult);</li>
-  <li>if (isset($searchResult[$userID]))</li>
-  <li>echo $searchResult[$userID]->getName();</li>
-</ul>
+<pre>
+<code>
+  $userID = 24;
+  $userClass = new User();
+  $searchResult =$userClass->getUsersWithSearch('userna');
+  //print_r($searchResult);
+  if (isset($searchResult[$userID]))
+    echo $searchResult[$userID]->getName();
+</code>
+</pre>
 <h3 align="left">Get All Users</h3>
-<ul>
-  <li>$userClass = new User();</li>
-  <li>$allUsers = $userClass->getAllUsers();</li>
-  <li>print_r($allUsers);</li>
-  <br>
-  <li>$firstUserID = 15;</li>
-  <li>$secondUserID = 16;</li>
-  <li>print_r($allUsers[$firstUserID]);</li>
-  <li>echo $allUsers[$secondUserID]->getUsername();</li>
-</ul>
+<pre>
+<code>
+  $userClass = new User();
+  $allUsers = $userClass->getAllUsers();
+  print_r($allUsers);<br>
+  $firstUserID = 15;
+  print_r($allUsers[$firstUserID]);<br>
+  $secondUserID = 16;
+  echo $allUsers[$secondUserID]->getUsername();
+</code>
+</pre>
 <h3 align="left">Set user data in array</h3>
-<ul>
-  <li>$userClass = new User();</li>
-  <li>$allUsers = $userClass->getAllUsers();</li>
-  <li>$allUsers[22]->setUsername = "youcansetuservalues";</li>
-  <li>if($allUsers[22]->validateInputs() && $allUsers[22]->validateIdentity())</li>
-  <li>$allUsers[22]->save();</li>
-  <li>echo $allUsers[22]->getUsername();</li>
-</ul>
+<pre>
+<code>
+  $userClass = new User();
+  $allUsers = $userClass->getAllUsers();
+  $allUsers[22]->setUsername = "youcansetuservalues";
+  if($allUsers[22]->validateInputs() && $allUsers[22]->validateIdentity())
+    $allUsers[22]->save();
+  echo $allUsers[22]->getUsername();
+</code>
+</pre>
 <h3 align="left">Functions</h3>
 <ul>
   <li>parseBirthDate() - Parse loaded user's birthDate to birthDateDay, birthDateMonth, birthDateYear.</li>
@@ -167,83 +194,98 @@ User Roles
 </ul>
 <h2 align="left">Product Class</h2>
 <h3 align="left">Create</h3>
-<ul>
-  <li>$product = new Product();</li>
-  <li>$product->setName = 'Best Product';</li>
-  <li>$product->setDescription = 'test desc';</li>
-  <li>$product->setCode = $product->generateProductCode('TST');</li>
-  <li>$product->setSlug = $product->createSlug($product->setName . '-' . $product->setCode);</li>
-  <li>$product->setStatus = 0;</li>
-  <li>$product->setShowSize = 0;</li>
-  <li>$product->setPage = '1';</li>
-  <li>$product->setCategory = '2';</li>
-  <li>$product->setSubCategory = '3';</li>
-  <li>$product->setPrice = '14.99';</li>
-  <li>$product->setDiscount = '0';</li>
-  <li>$product->setDiscountedPrice = '14.99';</li>
-  <li>$product->setImage1 = 'image1.jpg';</li>
-  <li>$product->setImage2 = 'image2.jpg';</li>
-  <li>$product->setImage3 = 'image3.jpg';</li>
-  <li>$productID = $product->create(); //returns lastInsertId when successfully insert</li>
-  <li>if ($productID)</li>
-  <li>#do something</li>
-</ul>
+<pre>
+<code>
+  $product = new Product();
+  $product->setName = 'Best Product';
+  $product->setDescription = 'test desc';
+  $product->setCode = $product->generateProductCode('TST');
+  $product->setSlug = $product->createSlug($product->setName . '-' . $product->setCode);
+  $product->setStatus = 0;
+  $product->setShowSize = 0;
+  $product->setPage = '1';
+  $product->setCategory = '2';
+  $product->setSubCategory = '3';
+  $product->setPrice = '14.99';
+  $product->setDiscount = '0';
+  $product->setDiscountedPrice = '14.99';
+  $product->setImage1 = 'image1.jpg';
+  $product->setImage2 = 'image2.jpg';
+  $product->setImage3 = 'image3.jpg';
+  $productID = $product->create(); //returns lastInsertId when successfully insert
+  if ($productID)
+    #do something
+</code>
+</pre>
 <h3 align="left">Load</h3>
-<ul>
-  <li>$productID = 135;</li>
-  <li>$product = new Product();</li>
-  <li>$product->load($userID);</li>
-  <li>echo $product->getName();</li>
-</ul>
+<pre>
+<code>
+  $productID = 135;
+  $product = new Product();
+  $product->load($userID);
+  echo $product->getName();
+</code>
+</pre>
 <h3 align="left">Load With Url</h3>
-<ul>
-  <li>$slug = "basic-oversize-t-shirt-bs-859728";</li>
-  <li>$product = new Product();</li>
-  <li>$product->loadWithUrl($slug);</li>
-  <li>echo $product->getPrice();</li>
-</ul>
+<pre>
+<code>
+  $slug = "basic-oversize-t-shirt-bs-859728";
+  $product = new Product();
+  $product->loadWithUrl($slug);
+  echo $product->getPrice();
+</code>
+</pre>
 <h3 align="left">Save</h3>
-<ul>
-  <li>$product = new Product();</li>
-  <li>$product->load(11129);</li>
-  <li>$product->setName = 'New Product Name';</li>
-  <li>$product->setSlug = $product->createSlug($product->setName . '-' . $product->setCode);</li>
-  <li>$product->save();</li>
-</ul>
+<pre>
+<code>
+  $product = new Product();
+  $product->load(11129);
+  $product->setName = 'New Product Name';
+  $product->setSlug = $product->createSlug($product->setName . '-' . $product->setCode);
+  $product->save();
+</code>
+</pre>
 <h3 align="left">Delete</h3>
-<ul>
-  <li>$product = new Product();</li>
-  <li>$product->load(82354);</li>
-  <li>if ($product->delete())</li>
-  <li>echo 'product deleted.';</li>
-</ul>
+<pre>
+<code>
+  $product = new Product();
+  $product->load(82354);
+  if ($product->delete())
+    echo 'product deleted.';
+</code>
+</pre>
 <h3 align="left">Get Products With Search</h3>
-<ul>
-  <li>$productClass = new Product();</li>
-  <li>$searchResult = $productClass->getProductsWithSearch('t-shirt');</li>
-  <li>print_r($searchResult);</li>
-</ul>
+<pre>
+<code>
+  $productClass = new Product();
+  $searchResult = $productClass->getProductsWithSearch('t-shirt');
+  print_r($searchResult);
+</code>
+</pre>
 <h3 align="left">Get All Products</h3>
-<ul>
-  <li>$productClass = new Product();</li>
-  <li>$allProducts = $productClass->getAllProducts();</li>
-  <li>print_r($allProducts);</li>
-  <br>
-  <li>$firstProductID = 1234;</li>
-  <li>$secondProductID = 9876;</li>
-  <li>print_r($allProducts[$firstProductID]);</li>
-  <li>echo $allProducts[$secondProductID]->getPrice();</li>
-</ul>
+<pre>
+<code>
+  $productClass = new Product();
+  $allProducts = $productClass->getAllProducts();
+  print_r($allProducts);<br>
+  $firstProductID = 1234;
+  print_r($allProducts[$firstProductID]);<br>
+  $secondProductID = 9876;
+  echo $allProducts[$secondProductID]->getPrice();
+</code>
+</pre>
 
 <h3 align="left">Set product data in array</h3>
-<ul>
-  <li>$productClass = new Product();</li>
-  <li>$allProducts = $productClass->getAllProducts();</li>
-  <li>$allProducts[11126]->setName = "youcansetproductvalues";</li>
-  <li>$allProducts[11126]->setSlug = $allProducts[11126]->createSlug($allProducts[11126]->setName . '-' . $allProducts[11126]->setCode);</li>
-  <li>$allProducts[11126]->save();</li>
-  <li>echo $allProducts[11126]->getSlug();</li>
-</ul>
+<pre>
+<code>
+  $productClass = new Product();
+  $allProducts = $productClass->getAllProducts();
+  $allProducts[11126]->setName = "youcansetproductvalues";
+  $allProducts[11126]->setSlug = $allProducts[11126]->createSlug($allProducts[11126]->setName . '-' . $allProducts[11126]->setCode);
+  $allProducts[11126]->save();
+  echo $allProducts[11126]->getSlug();
+</code>
+</pre>
 
 <h3 align="left">Functions</h3>
 <ul>
