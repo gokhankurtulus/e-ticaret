@@ -12,8 +12,9 @@
  *  14 -> load error, search parameter is null
  *
  *  21 -> save error, id null
- *  22 -> save error, slug exist
- *  23 -> save error, failed to user saving
+ *  22 -> save error, code exist
+ *  23 -> save error, slug exist
+ *  24 -> save error, failed to user saving
  *
  *
  *  41 -> register error, failed to register
@@ -177,12 +178,19 @@ class Product extends DB
     {
         if (!isset($this->id))
             throw new Exception('product ID cannot be null.', 21);
+        if ($this->setCode != $this->getCode()) {
+            $checkCode = $this->_db->prepare("SELECT * FROM product WHERE code =?");
+            $checkCode->execute([$this->setCode]);
+            $checkCode = $checkCode->fetch();
+            if ($checkCode)
+                throw new Exception('code exist.', 22);
+        }
         if ($this->setSlug != $this->getSlug()) {
-            $checkExist = $this->_db->prepare("SELECT * FROM product WHERE BINARY slug =?");
-            $checkExist->execute([$this->setSlug]);
-            $checkExist = $checkExist->fetch();
-            if ($checkExist)
-                throw new Exception('slug exist.', 22);
+            $checkSlug = $this->_db->prepare("SELECT * FROM product WHERE BINARY slug =?");
+            $checkSlug->execute([$this->setSlug]);
+            $checkSlug = $checkSlug->fetch();
+            if ($checkSlug)
+                throw new Exception('slug exist.', 23);
         }
         $sql = "UPDATE product SET 
                 name=?,
@@ -204,7 +212,7 @@ class Product extends DB
                 id=?";
         $user = $this->_db->prepare($sql)->execute([$this->setName, $this->setDescription, $this->setCode, $this->setSlug, $this->setStatus, $this->setShowSize, $this->setPage, $this->setCategory, $this->setSubCategory, $this->setDiscount, $this->setPrice, $this->setDiscountedPrice, $this->setImage1, $this->setImage2, $this->setImage3, $this->id]);
         if (!$user)
-            throw new Exception('Failed to product saving.', 23);
+            throw new Exception('Failed to product saving.', 24);
         else {
             $this->load($this->id);
             return true;
@@ -235,6 +243,7 @@ class Product extends DB
         else
             return false;
     }
+
     public function generateProductCode($code_start)
     {
         tryagain:
