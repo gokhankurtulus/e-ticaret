@@ -3,12 +3,13 @@
 /*
  *  Exception List
  *  Code -> Definition
- *  001 -> validate error, name regex
- *  002 -> validate error, surname regex
- *  003 -> validate error, mail regex
- *  004 -> validate error, identity is not 11 character
- *  005 -> validate error, identity wrong
- *  006 -> validate error, identity check error
+ *  001 -> validate error, username regex
+ *  002 -> validate error, name regex
+ *  003 -> validate error, surname regex
+ *  004 -> validate error, mail regex
+ *  005 -> validate error, identity is not 11 character
+ *  006 -> validate error, identity wrong
+ *  007 -> validate error, identity check error
  *
  *  11 -> load error, id null
  *  12 -> load error, user not found
@@ -95,33 +96,31 @@ class User extends DB
         if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
-            $this->setUsername = $user['username'];
             $this->name = $user['name'];
-            $this->setName = $user['name'];
             $this->surname = $user['surname'];
-            $this->setSurname = $user['surname'];
             $this->password = $user['password'];
-            $this->setPassword = $user['password'];
-
             $this->status = $user['status'];
-            $this->setStatus = $user['status'];
-
             $this->mail = $user['mail'];
-            $this->setMail = $user['mail'];
             $this->phone = $user['phone'];
-            $this->setPhone = $user['phone'];
             $this->identity = $user['identity'];
-            $this->setIdentity = $user['identity'];
             $this->birthDate = $user['birth'];
-            $this->setBirthDate = $user['birth'];
-
             $this->city = $user['city'];
-            $this->setCity = $user['city'];
             $this->fullAddress = $user['address'];
+
+            $this->setUsername = $user['username'];
+            $this->setName = $user['name'];
+            $this->setSurname = $user['surname'];
+            $this->setPassword = $user['password'];
+            $this->setStatus = $user['status'];
+            $this->setMail = $user['mail'];
+            $this->setPhone = $user['phone'];
+            $this->setIdentity = $user['identity'];
+            $this->setBirthDate = $user['birth'];
+            $this->setCity = $user['city'];
             $this->setFullAddress = $user['address'];
 
-            $this->parseBirthDate($this);
-            return $this;
+            $this->parseBirthDate();
+            return true;
         }
         return false;
     }
@@ -136,36 +135,8 @@ class User extends DB
         if (!$user)
             throw new Exception('User not found with this username: ' . $username, 12);
         if (!empty($user)) {
-            $this->id = $user['id'];
-            $this->username = $user['username'];
-            $this->setUsername = $user['username'];
-            $this->name = $user['name'];
-            $this->setName = $user['name'];
-            $this->surname = $user['surname'];
-            $this->setSurname = $user['surname'];
-            $this->password = $user['password'];
-            $this->setPassword = $user['password'];
-
-            $this->status = $user['status'];
-            $this->setStatus = $user['status'];
-
-            $this->mail = $user['mail'];
-            $this->setMail = $user['mail'];
-            $this->phone = $user['phone'];
-            $this->setPhone = $user['phone'];
-            $this->identity = $user['identity'];
-            $this->setIdentity = $user['identity'];
-            $this->birthDate = $user['birth'];
-            $this->setBirthDate = $user['birth'];
-
-            $this->city = $user['city'];
-            $this->setCity = $user['city'];
-            $this->fullAddress = $user['address'];
-            $this->setFullAddress = $user['address'];
-
-            $this->parseBirthDate($this);
-
-            return $this;
+            $this->load($user['id']);
+            return true;
         }
         return false;
     }
@@ -179,31 +150,8 @@ class User extends DB
         if ($users->rowCount()) {
             foreach ($users as $user) {
                 $newUser = new User();
-                $newUser->id = $user['id'];
-                $newUser->username = $user['username'];
-                $newUser->setUsername = $user['username'];
-                $newUser->name = $user['name'];
-                $newUser->setName = $user['name'];
-                $newUser->surname = $user['surname'];
-                $newUser->setSurname = $user['surname'];
-                $newUser->password = $user['password'];
-                $newUser->setPassword = $user['password'];
-                $newUser->status = $user['status'];
-                $newUser->setStatus = $user['status'];
-                $newUser->mail = $user['mail'];
-                $newUser->setMail = $user['mail'];
-                $newUser->phone = $user['phone'];
-                $newUser->setPhone = $user['phone'];
-                $newUser->identity = $user['identity'];
-                $newUser->setIdentity = $user['identity'];
-                $newUser->birthDate = $user['birth'];
-                $newUser->setBirthDate = $user['birth'];
-                $newUser->city = $user['city'];
-                $newUser->setCity = $user['city'];
-                $newUser->fullAddress = $user['address'];
-                $newUser->setFullAddress = $user['address'];
-                $this->parseBirthDate($newUser);
-                $userArray[$user['id']] = $newUser;
+                $newUser->load($user['id']);
+                $userArray[$newUser->getID()] = $newUser;
             }
             return $userArray;
         }
@@ -222,31 +170,8 @@ class User extends DB
         if ($users->rowCount()) {
             foreach ($users as $user) {
                 $newUser = new User();
-                $newUser->id = $user['id'];
-                $newUser->username = $user['username'];
-                $newUser->setUsername = $user['username'];
-                $newUser->name = $user['name'];
-                $newUser->setName = $user['name'];
-                $newUser->surname = $user['surname'];
-                $newUser->setSurname = $user['surname'];
-                $newUser->password = $user['password'];
-                $newUser->setPassword = $user['password'];
-                $newUser->status = $user['status'];
-                $newUser->setStatus = $user['status'];
-                $newUser->mail = $user['mail'];
-                $newUser->setMail = $user['mail'];
-                $newUser->phone = $user['phone'];
-                $newUser->setPhone = $user['phone'];
-                $newUser->identity = $user['identity'];
-                $newUser->setIdentity = $user['identity'];
-                $newUser->birthDate = $user['birth'];
-                $newUser->setBirthDate = $user['birth'];
-                $newUser->city = $user['city'];
-                $newUser->setCity = $user['city'];
-                $newUser->fullAddress = $user['address'];
-                $newUser->setFullAddress = $user['address'];
-                $this->parseBirthDate($newUser);
-                $userArray[$user['id']] = $newUser;
+                $newUser->load($user['id']);
+                $userArray[$newUser->getID()] = $newUser;
             }
             return $userArray;
         }
@@ -358,54 +283,48 @@ class User extends DB
             throw new Exception('Username or mail exist.', 42);
     }
 
-    private function parseBirthDate($user)
+    private function parseBirthDate()
     {
-        $birthDateTime = new DateTime($user->birthDate);
-        $user->birthDateDay = $birthDateTime->format('d');
-        $user->birthDateMonth = $birthDateTime->format('m');
-        $user->birthDateYear = $birthDateTime->format('Y');
+        $birthDateTime = new DateTime($this->birthDate);
+        $this->birthDateDay = $birthDateTime->format('d');
+        $this->birthDateMonth = $birthDateTime->format('m');
+        $this->birthDateYear = $birthDateTime->format('Y');
     }
 
     public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
     {
+        if (!preg_match("/^[a-zA-Z']*$/", $this->setUsername) || is_null($this->setUsername))
+            throw new Exception('Only english characters allowed on username.', 001);
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
-            throw new Exception('Only letters and white space allowed on name.', 001);
+            throw new Exception('Only letters and white space allowed on name.', 002);
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
-            throw new Exception('Only letters and white space allowed on surname.', 002);
+            throw new Exception('Only letters and white space allowed on surname.', 003);
         if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
-            throw new Exception('Invalid email format: ' . $this->setMail, 003);
+            throw new Exception('Invalid email format: ' . $this->setMail, 004);
 
         return true;
     }
 
-    private function turkishCharlowerToUpper($text)
-    {
-        $search = array("ç", "i", "ı", "ğ", "ö", "ş", "ü");
-        $replace = array("Ç", "İ", "I", "Ğ", "Ö", "Ş", "Ü");
-        $text = str_replace($search, $replace, $text);
-        $text = strtoupper($text);
-        return $text;
-    }
 
     public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true/false or "err"
     {
         if (strlen($this->setIdentity) != 11)
-            throw new Exception('identity must be 11 character.', 004);
+            throw new Exception('identity must be 11 character.', 005);
         $client = new SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
         try {
             $result = $client->TCKimlikNoDogrula([
                 'TCKimlikNo' => $this->setIdentity,
-                'Ad' => $this->turkishCharlowerToUpper(trim($this->setName)),
-                'Soyad' => $this->turkishCharlowerToUpper(trim($this->setSurname)),
+                'Ad' => trim($this->setName),
+                'Soyad' => trim($this->setSurname),
                 'DogumYili' => $this->birthDateYear
             ]);
             if ($result->TCKimlikNoDogrulaResult) {
                 return true;
             } else {
-                throw new Exception('identity wrong.', 005);
+                throw new Exception('identity wrong.', 006);
             }
         } catch (Exception $e) {
-            throw new Exception('identity check error.', 006);
+            throw new Exception('identity check error.', 007);
         }
     }
 
