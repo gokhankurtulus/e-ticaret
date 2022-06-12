@@ -11,8 +11,8 @@
 </p>
 <ul>
   <li>jQuery v3.5.1</li>
-  <li>jQuery UI - v1.12.1</li>
-  <li>SOAP</li>
+  <li>jQuery UI - v1.12.1 (for datepicker)</li>
+  <li>SOAP (for validate identity, https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL)</li>
 </ul>
 <ul>
   <li><a href="https://github.com/gokhankurtulus/e-ticaret#user-class">User Class</a></li>
