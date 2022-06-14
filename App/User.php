@@ -3,16 +3,18 @@
 /*
  *  Exception List
  *  Code -> Definition
- *  001 -> validate error, username regex
- *  002 -> validate error, name regex
- *  003 -> validate error, surname regex
- *  004 -> validate error, mail regex
- *  005 -> validate error, username must be 6-20 char
- *  006 -> validate error, name must be 2-20 char
- *  007 -> validate error, surname must be 2-20 char
- *  101 -> validate error, identity is not 11 character
- *  102 -> validate error, identity wrong
- *  103 -> validate error, identity check error
+ *  100 -> validate error, username must be 6-20 char
+ *  101 -> validate error, name must be 2-20 char
+ *  102 -> validate error, surname must be 2-20 char
+ *  103 -> validate error, mail empty
+ *  104 -> validate error, username regex
+ *  105 -> validate error, name regex
+ *  106 -> validate error, surname regex
+ *  107 -> validate error, mail regex
+ *
+ *  200 -> validate error, identity is not 11 character
+ *  201 -> validate error, identity wrong
+ *  202 -> validate error, identity check error
  *
  *  11 -> load error, id null
  *  12 -> load error, user not found
@@ -303,15 +305,15 @@ class User extends DB
         if (!(strlen($this->setSurname) >= 2 && strlen($this->setSurname) <= 20))
             throw new Exception('Surname must be 2-20 character long.', 102);
         if (empty(trim($this->setMail)))
-            throw new Exception('Email cannot be empty.', 007);
+            throw new Exception('Email cannot be empty.', 103);
         if (!preg_match("/^[a-zA-Z']*$/", $this->setUsername) || is_null($this->setUsername))
-            throw new Exception('Only english characters allowed on username.', 103);
+            throw new Exception('Only english characters allowed on username.', 104);
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
-            throw new Exception('Only letters and white space allowed on name.', 104);
+            throw new Exception('Only letters and white space allowed on name.', 105);
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
-            throw new Exception('Only letters and white space allowed on surname.', 105);
+            throw new Exception('Only letters and white space allowed on surname.', 106);
         if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
-            throw new Exception('Invalid email format: ' . $this->setMail, 106);
+            throw new Exception('Invalid email format: ' . $this->setMail, 107);
 
         return true;
     }
@@ -321,7 +323,7 @@ class User extends DB
     {
         $int_identity = ctype_digit($this->setIdentity) ? intval($this->setIdentity) : null;
         if (strlen($int_identity) != 11 || !is_int($int_identity))
-            throw new Exception('identity must be 11 digit number.', 101);
+            throw new Exception('identity must be 11 digit number.', 200);
         $client = new SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
         try {
             $result = $client->TCKimlikNoDogrula([
@@ -333,10 +335,10 @@ class User extends DB
             if ($result->TCKimlikNoDogrulaResult) {
                 return true;
             } else {
-                throw new Exception('identity wrong.', 102);
+                throw new Exception('identity wrong.', 201);
             }
         } catch (Exception $e) {
-            throw new Exception('identity check error.', 103);
+            throw new Exception('identity check error.', 202);
         }
     }
 
