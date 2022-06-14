@@ -27,6 +27,7 @@ if (isset($_REQUEST['rgsUsername']) && isset($_REQUEST['rgsPassword'])) {
         $userForRegister->setBirthDate = $_REQUEST['rgsBirth'];
         $userForRegister->parseBirthDate();
         $userForRegister->validateInputs();
+        //$userForRegister->validateIdentity();
         $registerResult = $userForRegister->register();
         if ($registerResult) {
             $registerInfo = array("id" => $registerResult);
