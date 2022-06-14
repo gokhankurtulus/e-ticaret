@@ -1,10 +1,21 @@
 <?php
 require_once "App/User.php";
-session_start();
-//unset($_SESSION['login']);
-if (isset($_SESSION['login'])){
-    $loginedUser = new User();
-    $loginedUser->load($_SESSION['login']);
+$errorMsg = null;
+$successMsg = null;
+if (isset($_REQUEST['rgs'])) {
+    try {
+        $userForRegister = new User();
+        $userForRegister->setName = $_REQUEST['rgsName'];
+        $userForRegister->setSurname = $_REQUEST['rgsSurname'];
+        $userForRegister->setIdentity = $_REQUEST['rgsIdentity'];
+        $userForRegister->setBirthDate = $_REQUEST['rgsBirth'];
+        $userForRegister->parseBirthDate();
+        if ($userForRegister->validateIdentity()) {
+            $successMsg = "Identity validated";
+        }
+    } catch (Exception $ex) {
+        $errorMsg = $ex->getMessage();
+    }
 }
 ?>
 <link rel="stylesheet" href="assets/css/all.min.css">
@@ -81,52 +92,8 @@ if (isset($_SESSION['login'])){
     }
 
 
-    .formBottom {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: .5em 0;
-    }
-
-    a {
-        text-decoration: none;
-        color: var(--dark);
-        transition: .5s;
-    }
-
-    a:hover {
-        color: var(--yellow);
-    }
-
-    label[for=_checkbox] {
-        margin: .5em 0;
-    }
-
-    label[for=_checkbox] a {
-        font-size: .6em;
-    }
-    input[id="_checkbox"] {
-        margin: .5em 0;
-    }
-
-    .social-container {
-        margin: 1em 0;
-    }
-
-    .social-container a {
-        border: 1px solid #DDDDDD;
-        border-radius: 50%;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 5px;
-        height: 40px;
-        width: 40px;
-    }
-
     #successMsg, #errorMsg, #loader {
-        display: none;
+        display: block;
     }
 
     #successMsg {
@@ -139,16 +106,10 @@ if (isset($_SESSION['login'])){
         font-weight: 500;
     }
 </style>
-<form id="registerForm" name="register" method="post">
-    <h3>Basic Sign Up Form</h3>
-    <p id="successMsg"></p>
-    <p id="errorMsg"></p>
-    <div class="inputDiv">
-        <i class="fas fa-user"></i>
-        <input type="text" name="rgsUsername" onkeypress="blockChars(this);" pattern=".{6,20}" title="6-20 character"
-               autocomplete="off"
-               placeholder="Username" required>
-    </div>
+<form name="register" method="post">
+    <h3>Validate Identity</h3>
+    <p id="successMsg"><?= $successMsg; ?></p>
+    <p id="errorMsg"><?= $errorMsg; ?></p>
     <div class="inputDiv">
         <i class="fas fa-id-card"></i>
         <input type="text" name="rgsName" onkeypress="blockChars(this,'tr');" pattern=".{2,20}" title="2-20 character"
@@ -168,42 +129,11 @@ if (isset($_SESSION['login'])){
                placeholder="Turkish Identification Number" required>
     </div>
     <div class="inputDiv">
-        <i class="fas fa-at"></i>
-        <input type="email" pattern="[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+).*" name="rgsMail" autocomplete="off"
-               placeholder="E-mail" required>
-    </div>
-    <div class="inputDiv">
-        <i class="fas fa-key"></i>
-        <input type="password" name="rgsPassword" onkeypress="blockChars(this);" pattern=".{6,20}" title="6-20 character"
-               autocomplete="off"
-               placeholder="Password" required>
-    </div>
-    <div class="inputDiv">
-        <i class="fas fa-phone-alt"></i>
-        <input type="tel" id="phoneNumber" name="rgsPhone" onkeypress="blockChars(this, 'phone');" minlength="16" maxlength="16" title="16 character"
-               autocomplete="off"
-               placeholder="Mobile Number (123) 456 - 7890" required>
-    </div>
-    <div class="inputDiv">
         <i class="fas fa-birthday-cake"></i>
         <input type="text" id="datepicker" name="rgsBirth" autocomplete="off" placeholder="Date of birth" required>
     </div>
-    <label for="_checkbox">
-        <input type="checkbox" id="_checkbox" value="1" required>
-        <a target="_blank" href="terms">By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. You may receive SMS notifications from us
-            and can opt out at any time.</a>
-    </label>
-    <input type="submit" name="rgs" value="Sign Up">
+    <input type="submit" name="rgs" value="Validate Identity">
     <img id="loader" draggable="false" src="assets/css/ajax-loader.gif">
-    <div class="formBottom">
-        <a href="testLogin.php">Log In</a>
-        <a href="">Forgot Password</a>
-    </div>
-    <div class="social-container">
-        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-    </div>
 </form>
 <script src="assets/js/jquery.js"></script>
 <script src="assets/js/jquery-ui.js"></script>
