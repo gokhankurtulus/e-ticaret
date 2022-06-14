@@ -296,20 +296,22 @@ class User extends DB
 
     public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
     {
-        if (!preg_match("/^[a-zA-Z']*$/", $this->setUsername) || is_null($this->setUsername))
-            throw new Exception('Only english characters allowed on username.', 001);
-        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
-            throw new Exception('Only letters and white space allowed on name.', 002);
-        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
-            throw new Exception('Only letters and white space allowed on surname.', 003);
-        if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
-            throw new Exception('Invalid email format: ' . $this->setMail, 004);
         if (!(strlen($this->setUsername) >= 6 && strlen($this->setUsername) <= 20))
-            throw new Exception('Username must be 6-20 character long.', 005);
+            throw new Exception('Username must be 6-20 character long.', 100);
         if (!(strlen($this->setName) >= 2 && strlen($this->setName) <= 20))
-            throw new Exception('Name must be 2-20 character long.', 006);
+            throw new Exception('Name must be 2-20 character long.', 101);
         if (!(strlen($this->setSurname) >= 2 && strlen($this->setSurname) <= 20))
-            throw new Exception('Surname must be 2-20 character long.', 007);
+            throw new Exception('Surname must be 2-20 character long.', 102);
+        if (empty(trim($this->setMail)))
+            throw new Exception('Email cannot be empty.', 007);
+        if (!preg_match("/^[a-zA-Z']*$/", $this->setUsername) || is_null($this->setUsername))
+            throw new Exception('Only english characters allowed on username.', 103);
+        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
+            throw new Exception('Only letters and white space allowed on name.', 104);
+        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
+            throw new Exception('Only letters and white space allowed on surname.', 105);
+        if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
+            throw new Exception('Invalid email format: ' . $this->setMail, 106);
 
         return true;
     }
@@ -317,8 +319,9 @@ class User extends DB
 
     public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true or exception
     {
-        if (strlen($this->setIdentity) != 11)
-            throw new Exception('identity must be 11 character.', 101);
+        $int_identity = ctype_digit($this->setIdentity) ? intval($this->setIdentity) : null;
+        if (strlen($int_identity) != 11 || !is_int($int_identity))
+            throw new Exception('identity must be 11 digit number.', 101);
         $client = new SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
         try {
             $result = $client->TCKimlikNoDogrula([
