@@ -21,8 +21,8 @@
  *  42 -> register error, code or slug exist
  */
 
-require_once 'DB.php';
-require_once 'define.php';
+namespace App\Models;
+use App\Database\DB;
 
 class Product extends DB
 {
@@ -75,12 +75,12 @@ class Product extends DB
     public function load($productID = null)
     {
         if (!isset($productID))
-            throw new Exception('productID is null', 11);
+            throw new \Exception('productID is null', 11);
         $product = $this->_db->prepare("SELECT * FROM product WHERE id =?");
         $product->execute([$productID]);
         $product = $product->fetch();
         if (!$product)
-            throw new Exception('product not found with this id: ' . $productID, 12);
+            throw new \Exception('product not found with this id: ' . $productID, 12);
         if (!empty($product)) {
             $this->id = $product['id'];
             $this->name = $product['name'];
@@ -124,12 +124,12 @@ class Product extends DB
     public function loadProductWithUrl($url = null) //loads product from db. returns object or exception or false
     {
         if (!isset($url))
-            throw new Exception('$url is null', 11);
+            throw new \Exception('$url is null', 11);
         $product = $this->_db->prepare("SELECT * FROM product WHERE slug =?");
         $product->execute([$url]);
         $product = $product->fetch();
         if (!$product)
-            throw new Exception('product not found with this url: ' . $url, 12);
+            throw new \Exception('product not found with this url: ' . $url, 12);
         if (!empty($product)) {
             $this->load($product['id']);
             return $this;
@@ -140,9 +140,9 @@ class Product extends DB
     public function getAllProducts() //returns array or exception or false
     {
         $productArray = [];
-        $products = $this->_db->query("SELECT * FROM product ORDER BY id ASC", PDO::FETCH_ASSOC);
+        $products = $this->_db->query("SELECT * FROM product ORDER BY id ASC", \PDO::FETCH_ASSOC);
         if (!$products)
-            throw new Exception('products not found.', 13);
+            throw new \Exception('products not found.', 13);
         if ($products->rowCount()) {
             foreach ($products as $product) {
                 $newProduct = new Product();
@@ -157,12 +157,12 @@ class Product extends DB
     public function getProductsWithSearch($search = null) //returns array or exception or false
     {
         if (!isset($search))
-            throw new Exception('search parameter is null', 14);
+            throw new \Exception('search parameter is null', 14);
         $productArray = [];
         $products = $this->_db->prepare("SELECT * FROM product WHERE id = ? OR name LIKE ? OR code = ? ORDER BY id DESC");
         $products->execute([$search, "%$search%", $search]);
         if (!$products)
-            throw new Exception('products not found.', 13);
+            throw new \Exception('products not found.', 13);
         if ($products->rowCount()) {
             foreach ($products as $product) {
                 $newProduct = new Product();
@@ -177,20 +177,20 @@ class Product extends DB
     public function save() //requires setUsername, setName, setSurname, setIdentity, setPhone, setBirthDate, setMail, setStatus, setCity, setFullAddress. returns true or exception
     {
         if (!isset($this->id))
-            throw new Exception('product ID cannot be null.', 21);
+            throw new \Exception('product ID cannot be null.', 21);
         if ($this->setCode != $this->getCode()) {
             $checkCode = $this->_db->prepare("SELECT * FROM product WHERE code =?");
             $checkCode->execute([$this->setCode]);
             $checkCode = $checkCode->fetch();
             if ($checkCode)
-                throw new Exception('code exist.', 22);
+                throw new \Exception('code exist.', 22);
         }
         if ($this->setSlug != $this->getSlug()) {
             $checkSlug = $this->_db->prepare("SELECT * FROM product WHERE BINARY slug =?");
             $checkSlug->execute([$this->setSlug]);
             $checkSlug = $checkSlug->fetch();
             if ($checkSlug)
-                throw new Exception('slug exist.', 23);
+                throw new \Exception('slug exist.', 23);
         }
         $sql = "UPDATE product SET 
                 name=?,
@@ -212,7 +212,7 @@ class Product extends DB
                 id=?";
         $user = $this->_db->prepare($sql)->execute([$this->setName, $this->setDescription, $this->setCode, $this->setSlug, $this->setStatus, $this->setShowSize, $this->setPage, $this->setCategory, $this->setSubCategory, $this->setDiscount, $this->setPrice, $this->setDiscountedPrice, $this->setImage1, $this->setImage2, $this->setImage3, $this->id]);
         if (!$user)
-            throw new Exception('Failed to product saving.', 24);
+            throw new \Exception('Failed to product saving.', 24);
         else {
             $this->load($this->id);
             return true;

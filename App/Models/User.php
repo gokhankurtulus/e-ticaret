@@ -40,9 +40,8 @@
  *
  */
 
-
-require_once 'DB.php';
-require_once 'define.php';
+namespace App\Models;
+use App\Database\DB;
 
 class User extends DB
 {
@@ -92,12 +91,12 @@ class User extends DB
     public function load($userID = null) //loads user from db. returns object or exception or false
     {
         if (!isset($userID))
-            throw new Exception('userID is null', 11);
+            throw new \Exception('userID is null', 11);
         $user = $this->_db->prepare("SELECT * FROM user WHERE id =?");
         $user->execute([$userID]);
         $user = $user->fetch();
         if (!$user)
-            throw new Exception('User not found with this id: ' . $userID, 12);
+            throw new \Exception('User not found with this id: ' . $userID, 12);
         if (!empty($user)) {
             $this->id = $user['id'];
             $this->username = $user['username'];
@@ -133,12 +132,12 @@ class User extends DB
     public function loadUserWithUsername($username = null) //loads user from db. returns object or exception or false
     {
         if (!isset($username))
-            throw new Exception('username is null', 11);
+            throw new \Exception('username is null', 11);
         $user = $this->_db->prepare("SELECT * FROM user WHERE username =?");
         $user->execute([$username]);
         $user = $user->fetch();
         if (!$user)
-            throw new Exception('User not found with this username: ' . $username, 12);
+            throw new \Exception('User not found with this username: ' . $username, 12);
         if (!empty($user)) {
             $this->load($user['id']);
             return true;
@@ -149,9 +148,9 @@ class User extends DB
     public function getAllUsers() //returns array or exception or false
     {
         $userArray = [];
-        $users = $this->_db->query("SELECT * FROM user ORDER BY id ASC", PDO::FETCH_ASSOC);
+        $users = $this->_db->query("SELECT * FROM user ORDER BY id ASC", \PDO::FETCH_ASSOC);
         if (!$users)
-            throw new Exception('Users not found.', 13);
+            throw new \Exception('Users not found.', 13);
         if ($users->rowCount()) {
             foreach ($users as $user) {
                 $newUser = new User();
@@ -166,12 +165,12 @@ class User extends DB
     public function getUsersWithSearch($search = null) //returns array or exception or false
     {
         if (!isset($search))
-            throw new Exception('search parameter is null', 14);
+            throw new \Exception('search parameter is null', 14);
         $userArray = [];
         $users = $this->_db->prepare("SELECT * FROM user WHERE id = ? OR username LIKE ? ORDER BY id DESC");
         $users->execute([$search, "%$search%"]);
         if (!$users)
-            throw new Exception('Users not found.', 13);
+            throw new \Exception('Users not found.', 13);
         if ($users->rowCount()) {
             foreach ($users as $user) {
                 $newUser = new User();
@@ -186,13 +185,13 @@ class User extends DB
     public function save() //requires setUsername, setName, setSurname, setIdentity, setPhone, setBirthDate, setMail, setStatus, setCity, setFullAddress. returns true or exception
     {
         if (!isset($this->id))
-            throw new Exception('User ID cannot be null.', 21);
+            throw new \Exception('User ID cannot be null.', 21);
         if ($this->setUsername != $this->getUsername()) {
             $checkExist = $this->_db->prepare("SELECT * FROM user WHERE username =?");
             $checkExist->execute([$this->setUsername]);
             $checkExist = $checkExist->fetch();
             if ($checkExist)
-                throw new Exception('username exist.', 22);
+                throw new \Exception('username exist.', 22);
         }
         $sql = "UPDATE user SET 
                 username=?,
@@ -207,7 +206,7 @@ class User extends DB
                 id=?";
         $user = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setStatus, $this->setMail, $this->setPhone, $this->setIdentity, $this->setBirthDate, $this->id]);
         if (!$user)
-            throw new Exception('Failed to user saving.', 23);
+            throw new \Exception('Failed to user saving.', 23);
         else {
             $this->load($this->id);
             return true;
@@ -217,9 +216,9 @@ class User extends DB
     public function changePassword() // requires $this->oldPassword, $this->setPassword, $this->setPasswordCheck. returns true or false
     {
         if ($this->setPassword != $this->setPasswordCheck)
-            throw new Exception('Password check doesn\'t match.', 51);
+            throw new \Exception('Password check doesn\'t match.', 51);
         if (!password_verify($this->oldPassword, $this->password))
-            throw new Exception('Wrong password.', 52);
+            throw new \Exception('Wrong password.', 52);
         $sql = "UPDATE user SET password=? WHERE id=?";
         if ($this->_db->prepare($sql)->execute([password_hash($this->setPassword, PASSWORD_DEFAULT), $this->id])) {
             $this->load($this->id);
@@ -231,7 +230,7 @@ class User extends DB
     public function changeAddress() //requires $this->setCity and $this->setFullAddress. returns true/false or exception
     {
         if ($this->setCity == $this->city && $this->setFullAddress == $this->fullAddress)
-            throw new Exception('Same address fields.', 61);
+            throw new \Exception('Same address fields.', 61);
         $sql = "UPDATE user SET city=?, address=? WHERE id=?";
         if ($this->_db->prepare($sql)->execute([$this->setCity, $this->setFullAddress, $this->id])) {
             $this->load($this->id);
@@ -252,17 +251,17 @@ class User extends DB
     public function login($username, $password) //requires $username, $password. returns true/false or exception
     {
         if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
-            throw new Exception('Username or password cannot be null.', 31);
+            throw new \Exception('Username or password cannot be null.', 31);
         $login = $this->_db->prepare("SELECT * FROM user WHERE username =?");
         $login->execute([$username]);
         $login = $login->fetch();
         if (!$login)
-            throw new Exception('User not found.', 32);
+            throw new \Exception('User not found.', 32);
         if ($login['status'] == Banned)
-            throw new Exception('Banned user.', 33);
+            throw new \Exception('Banned user.', 33);
         $passwordCheck = password_verify($password, $login['password']);
         if (!$passwordCheck)
-            throw new Exception('Password doesnt match.', 34);
+            throw new \Exception('Password doesnt match.', 34);
         if ($login && $login['status'] >= 1 && $passwordCheck) {
             $this->load($login['id']);
             return true;
@@ -283,14 +282,14 @@ class User extends DB
             if ($register)
                 return $this->_db->lastInsertId();
             else
-                throw new Exception('Failed to register.', 41);
+                throw new \Exception('Failed to register.', 41);
         } else
-            throw new Exception('Username or mail exist.', 42);
+            throw new \Exception('Username or mail exist.', 42);
     }
 
     public function parseBirthDate()
     {
-        $birthDateTime = new DateTime($this->setBirthDate);
+        $birthDateTime = new \DateTime($this->setBirthDate);
         $this->birthDateDay = $birthDateTime->format('d');
         $this->birthDateMonth = $birthDateTime->format('m');
         $this->birthDateYear = $birthDateTime->format('Y');
@@ -299,21 +298,21 @@ class User extends DB
     public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
     {
         if (!(strlen($this->setUsername) >= 6 && strlen($this->setUsername) <= 20))
-            throw new Exception('Username must be 6-20 character long.', 100);
+            throw new \Exception('Username must be 6-20 character long.', 100);
         if (!(strlen($this->setName) >= 2 && strlen($this->setName) <= 20))
-            throw new Exception('Name must be 2-20 character long.', 101);
+            throw new \Exception('Name must be 2-20 character long.', 101);
         if (!(strlen($this->setSurname) >= 2 && strlen($this->setSurname) <= 20))
-            throw new Exception('Surname must be 2-20 character long.', 102);
+            throw new \Exception('Surname must be 2-20 character long.', 102);
         if (empty(trim($this->setMail)))
-            throw new Exception('Email cannot be empty.', 103);
+            throw new \Exception('Email cannot be empty.', 103);
         if (!preg_match("/^[a-zA-Z']*$/", $this->setUsername) || is_null($this->setUsername))
-            throw new Exception('Only english characters allowed on username.', 104);
+            throw new \Exception('Only english characters allowed on username.', 104);
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
-            throw new Exception('Only letters and white space allowed on name.', 105);
+            throw new \Exception('Only letters and white space allowed on name.', 105);
         if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
-            throw new Exception('Only letters and white space allowed on surname.', 106);
+            throw new \Exception('Only letters and white space allowed on surname.', 106);
         if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
-            throw new Exception('Invalid email format: ' . $this->setMail, 107);
+            throw new \Exception('Invalid email format: ' . $this->setMail, 107);
 
         return true;
     }
@@ -323,8 +322,8 @@ class User extends DB
     {
         $int_identity = ctype_digit($this->setIdentity) ? intval($this->setIdentity) : null;
         if (strlen($int_identity) != 11 || !is_int($int_identity))
-            throw new Exception('identity must be 11 digit number.', 200);
-        $client = new SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
+            throw new \Exception('identity must be 11 digit number.', 200);
+        $client = new \SoapClient("https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL");
         try {
             $result = $client->TCKimlikNoDogrula([
                 'TCKimlikNo' => $this->setIdentity,
@@ -335,10 +334,10 @@ class User extends DB
             if ($result->TCKimlikNoDogrulaResult) {
                 return true;
             } else {
-                throw new Exception('identity wrong.', 201);
+                throw new \Exception('identity wrong.', 201);
             }
-        } catch (Exception $e) {
-            throw new Exception('identity check error.', 202);
+        } catch (\Exception $e) {
+            throw new \Exception('identity check error.', 202);
         }
     }
 
