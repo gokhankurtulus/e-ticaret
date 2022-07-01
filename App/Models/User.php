@@ -1,254 +1,62 @@
 <?php
 
-/*
- *  Exception List
- *  Code -> Definition
- *  100 -> validate error, username must be 6-20 char
- *  101 -> validate error, name must be 2-20 char
- *  102 -> validate error, surname must be 2-20 char
- *  103 -> validate error, mail empty
- *  104 -> validate error, username regex
- *  105 -> validate error, name regex
- *  106 -> validate error, surname regex
- *  107 -> validate error, mail regex
- *
- *  200 -> validate error, identity is not 11 character
- *  201 -> validate error, identity wrong
- *  202 -> validate error, identity check error
- *
- *  11 -> load error, id null
- *  12 -> load error, user not found
- *  13 -> load error, users not found
- *  14 -> load error, search parameter is null
- *
- *  21 -> save error, id null
- *  22 -> save error, username exist
- *  23 -> save error, failed to user saving
- *
- *  31 -> login error, username or password null
- *  32 -> login error, user not found
- *  33 -> login error, banned user
- *  34 -> login error, wrong password
- *
- *  41 -> register error, failed to register
- *  42 -> register error, username or mail exist
- *
- *  51 -> change password, password check doesnt match
- *  52 -> change password, old password wrong
- *
- *  61 -> change address, same address
- *
- */
-
 namespace App\Models;
-use App\Database\DB;
 
-class User extends DB
+class User extends Model
 {
-    private $id;
-    private $username;
-    private $name;
-    private $surname;
-    private $password;
+    protected static $table = 'user';
+    protected $id;
+    protected $username;
+    protected $name;
+    protected $surname;
+    protected $password;
 
-    private $status;
+    protected $status;
 
-    private $mail;
-    private $phone;
-    private $identity;
-    private $birthDate;
-    private $birthDateDay;
-    private $birthDateMonth;
-    private $birthDateYear;
+    protected $mail;
+    protected $phone;
+    protected $identity;
+    protected $birthDate;
+    protected $birthDateDay;
+    protected $birthDateMonth;
+    protected $birthDateYear;
 
-    private $city;
-    private $fullAddress;
+    protected $city;
+    protected $fullAddress;
 
-
-    public $setUsername;
-    public $setName;
-    public $setSurname;
-    public $setPassword;
-    public $setPasswordCheck;
-    public $oldPassword;
-
-    public $setStatus;
-
-    public $setMail;
-    public $setPhone;
-    public $setIdentity;
-    public $setBirthDate;
-
-    public $setCity;
-    public $setFullAddress;
-
-
-    public function __construct()
+    protected static function getTable()
     {
-        parent::__construct();
+        return static::$table;
     }
 
-    public function load($userID = null) //loads user from db. returns object or exception or false
+    protected static function getClass()
     {
-        if (!isset($userID))
-            throw new \Exception('userID is null', 11);
-        $user = $this->_db->prepare("SELECT * FROM user WHERE id =?");
-        $user->execute([$userID]);
-        $user = $user->fetch();
-        if (!$user)
-            throw new \Exception('User not found with this id: ' . $userID, 12);
-        if (!empty($user)) {
-            $this->id = $user['id'];
-            $this->username = $user['username'];
-            $this->name = $user['name'];
-            $this->surname = $user['surname'];
-            $this->password = $user['password'];
-            $this->status = $user['status'];
-            $this->mail = $user['mail'];
-            $this->phone = $user['phone'];
-            $this->identity = $user['identity'];
-            $this->birthDate = $user['birth'];
-            $this->city = $user['city'];
-            $this->fullAddress = $user['address'];
+        return self::class;
+    }
 
-            $this->setUsername = $user['username'];
-            $this->setName = $user['name'];
-            $this->setSurname = $user['surname'];
-            $this->setPassword = $user['password'];
-            $this->setStatus = $user['status'];
-            $this->setMail = $user['mail'];
-            $this->setPhone = $user['phone'];
-            $this->setIdentity = $user['identity'];
-            $this->setBirthDate = $user['birth'];
-            $this->setCity = $user['city'];
-            $this->setFullAddress = $user['address'];
 
+    public function load($resource)
+    {
+        if (!empty($resource)) {
+            $this->id = $resource['id'];
+            $this->username = $resource['username'];
+            $this->name = $resource['name'];
+            $this->surname = $resource['surname'];
+            $this->password = $resource['password'];
+            $this->status = $resource['status'];
+            $this->mail = $resource['mail'];
+            $this->phone = $resource['phone'];
+            $this->identity = $resource['identity'];
+            $this->birthDate = $resource['birth'];
+            $this->city = $resource['city'];
+            $this->fullAddress = $resource['address'];
             $this->parseBirthDate();
             return true;
         }
         return false;
     }
 
-    public function loadUserWithUsername($username = null) //loads user from db. returns object or exception or false
-    {
-        if (!isset($username))
-            throw new \Exception('username is null', 11);
-        $user = $this->_db->prepare("SELECT * FROM user WHERE username =?");
-        $user->execute([$username]);
-        $user = $user->fetch();
-        if (!$user)
-            throw new \Exception('User not found with this username: ' . $username, 12);
-        if (!empty($user)) {
-            $this->load($user['id']);
-            return true;
-        }
-        return false;
-    }
-
-    public function getAllUsers() //returns array or exception or false
-    {
-        $userArray = [];
-        $users = $this->_db->query("SELECT * FROM user ORDER BY id ASC", \PDO::FETCH_ASSOC);
-        if (!$users)
-            throw new \Exception('Users not found.', 13);
-        if ($users->rowCount()) {
-            foreach ($users as $user) {
-                $newUser = new User();
-                $newUser->load($user['id']);
-                $userArray[$newUser->getID()] = $newUser;
-            }
-            return $userArray;
-        }
-        return false;
-    }
-
-    public function getUsersWithSearch($search = null) //returns array or exception or false
-    {
-        if (!isset($search))
-            throw new \Exception('search parameter is null', 14);
-        $userArray = [];
-        $users = $this->_db->prepare("SELECT * FROM user WHERE id = ? OR username LIKE ? ORDER BY id DESC");
-        $users->execute([$search, "%$search%"]);
-        if (!$users)
-            throw new \Exception('Users not found.', 13);
-        if ($users->rowCount()) {
-            foreach ($users as $user) {
-                $newUser = new User();
-                $newUser->load($user['id']);
-                $userArray[$newUser->getID()] = $newUser;
-            }
-            return $userArray;
-        }
-        return false;
-    }
-
-    public function save() //requires setUsername, setName, setSurname, setIdentity, setPhone, setBirthDate, setMail, setStatus, setCity, setFullAddress. returns true or exception
-    {
-        if (!isset($this->id))
-            throw new \Exception('User ID cannot be null.', 21);
-        if ($this->setUsername != $this->getUsername()) {
-            $checkExist = $this->_db->prepare("SELECT * FROM user WHERE username =?");
-            $checkExist->execute([$this->setUsername]);
-            $checkExist = $checkExist->fetch();
-            if ($checkExist)
-                throw new \Exception('username exist.', 22);
-        }
-        $sql = "UPDATE user SET 
-                username=?,
-                name=?,
-                surname=?,
-                status=?,
-                mail=?,
-                phone=?,
-                identity=?,
-                birth=?
-                WHERE
-                id=?";
-        $user = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setStatus, $this->setMail, $this->setPhone, $this->setIdentity, $this->setBirthDate, $this->id]);
-        if (!$user)
-            throw new \Exception('Failed to user saving.', 23);
-        else {
-            $this->load($this->id);
-            return true;
-        }
-    }
-
-    public function changePassword() // requires $this->oldPassword, $this->setPassword, $this->setPasswordCheck. returns true or false
-    {
-        if ($this->setPassword != $this->setPasswordCheck)
-            throw new \Exception('Password check doesn\'t match.', 51);
-        if (!password_verify($this->oldPassword, $this->password))
-            throw new \Exception('Wrong password.', 52);
-        $sql = "UPDATE user SET password=? WHERE id=?";
-        if ($this->_db->prepare($sql)->execute([password_hash($this->setPassword, PASSWORD_DEFAULT), $this->id])) {
-            $this->load($this->id);
-            return true;
-        } else
-            return false;
-    }
-
-    public function changeAddress() //requires $this->setCity and $this->setFullAddress. returns true/false or exception
-    {
-        if ($this->setCity == $this->city && $this->setFullAddress == $this->fullAddress)
-            throw new \Exception('Same address fields.', 61);
-        $sql = "UPDATE user SET city=?, address=? WHERE id=?";
-        if ($this->_db->prepare($sql)->execute([$this->setCity, $this->setFullAddress, $this->id])) {
-            $this->load($this->id);
-            return true;
-        } else
-            return false;
-    }
-
-    public function delete()
-    {
-        $sql = "DELETE FROM user WHERE id =?";
-        if ($this->_db->prepare($sql)->execute([$this->id]))
-            return true;
-        else
-            return false;
-    }
-
-    public function login($username, $password) //requires $username, $password. returns true/false or exception
+    public function login($username, $password) //TODO changed, will remove
     {
         if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
             throw new \Exception('Username or password cannot be null.', 31);
@@ -269,7 +77,8 @@ class User extends DB
         return false;
     }
 
-    public function register() //requires setUsername, setName, setSurname, setIdentity, setPassword, setPhone, setBirthDate, setMail, setStatus. returns true or exception
+
+    public function register() //TODO changed, will remove
     {
         $this->setPassword = password_hash($this->setPassword, PASSWORD_DEFAULT);
 
@@ -289,13 +98,13 @@ class User extends DB
 
     public function parseBirthDate()
     {
-        $birthDateTime = new \DateTime($this->setBirthDate);
+        $birthDateTime = new \DateTime($this->birthDate);
         $this->birthDateDay = $birthDateTime->format('d');
         $this->birthDateMonth = $birthDateTime->format('m');
         $this->birthDateYear = $birthDateTime->format('Y');
     }
 
-    public function validateInputs() //validate setName, setSurname, setMail. returns true or exception
+    public function validateInputs() //TODO changed, will remove
     {
         if (!(strlen($this->setUsername) >= 6 && strlen($this->setUsername) <= 20))
             throw new \Exception('Username must be 6-20 character long.', 100);
@@ -318,7 +127,7 @@ class User extends DB
     }
 
 
-    public function validateIdentity() //validate setName, setSurname, setIdentity, birthDateYear. returns true or exception
+    public function validateIdentity() //TODO changed, will remove
     {
         $int_identity = ctype_digit($this->setIdentity) ? intval($this->setIdentity) : null;
         if (strlen($int_identity) != 11 || !is_int($int_identity))
