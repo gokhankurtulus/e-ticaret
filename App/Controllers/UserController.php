@@ -8,12 +8,17 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    public static function create(array $attributes)
+    {
+        $user = User::create($attributes);
+        return $user;
+    }
 
-    public static function get($where = [])
+    public static function get($where = [], $operator = 'AND')
     {
         $response = parent::middleware(UserControlMiddleware::class, $where);
         if ($response) {
-            $user = User::get(where: $where);
+            $user = User::get(where: $where, operator: $operator);
             return $user;
         } else {
             return false;
@@ -26,14 +31,14 @@ class UserController extends Controller
         return $result;
     }
 
-    public static function set($identifier, $where = [], $operator = "AND",)
+    public static function set(array $attributes, $where = [], $operator = "AND")
     {
         $user = User::get(where: $where);
         if ($user) {
-            if (isset($identifier['username']) && isset($where['username']) && ($identifier['username'] != $user->getUsername())) {
-                $exist = parent::middleware(CheckUsernameExist::class, $identifier);
+            if (isset($attributes['username']) && isset($where['username']) && ($attributes['username'] != $user->getUsername())) {
+                $exist = parent::middleware(CheckUsernameExist::class, $attributes);
                 if (!$exist) {
-                    $user = User::set(identifier: $identifier, where: $where, operator: $operator);
+                    $user = User::update(attributes: $attributes, where: $where, operator: $operator);
                     if ($user)
                         return $user;
                 }

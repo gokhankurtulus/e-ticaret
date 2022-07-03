@@ -11,33 +11,66 @@ class Builder extends DB
         parent::__construct();
     }
 
+    const CREATE = 1;
+    const GET = 2;
+    const SEARCH = 3;
+    const UPDATE = 4;
+    const DELETE = 5;
+
     public $query;
     public $pdo;
     public $table;
+    public $operation;
+
+    public function create()
+    {
+        $this->operation = self::CREATE;
+        $this->query .= "INSERT INTO $this->table ";
+        return $this;
+    }
 
     public function get($keywords = "*")
     {
+        $this->operation = self::GET;
         $this->query .= "SELECT $keywords FROM $this->table";
+        return $this;
+    }
+
+    public function search($column)
+    {
+        $this->operation = self::SEARCH;
+        $this->query .= "SELECT * FROM $this->table WHERE MATCH(`$column`) AGAINST(:search IN BOOLEAN MODE)";
         return $this;
     }
 
     public function update()
     {
-        $this->query .= "UPDATE $this->table";
+        $this->operation = self::UPDATE;
+        $this->query .= "UPDATE $this->table  SET ";
         return $this;
     }
 
-    public function columns($columns)
+    public function columns(array $columns)
     {
-        $cols = "";
-        foreach ($columns as $key => $value)
-            $value != end($columns) ? $cols .= " $value = ?," : $cols .= " $value = ?";
-        $this->query .= ' SET ' . $cols;
+        if ($this->operation == self::CREATE) {
+            $cols = "";
+            $questionMarks = "";
+            foreach ($columns as $column) {
+                $cols .= $column != end($columns) ? "$column," : "$column";
+                $questionMarks .= $column != end($columns) ? "?," : "?";
+            }
+            $this->query .= "($cols) VALUES ($questionMarks)";
+        }
+        if ($this->operation == self::UPDATE) {
+            foreach ($columns as $column)
+                $this->query .= $column != end($columns) ? "$column = ?," : "$column = ?";
+        }
         return $this;
     }
 
     public function delete()
     {
+        $this->operation = self::DELETE;
         $this->query .= "DELETE FROM $this->table";
         return $this;
     }
@@ -54,13 +87,8 @@ class Builder extends DB
         return $this;
     }
 
-    public function search($column)
-    {
-        $this->query .= "SELECT * FROM $this->table WHERE MATCH(`$column`) AGAINST(:search IN BOOLEAN MODE)";
-        return $this;
-    }
 
-    public function execute($params = [], $fetch = null)
+    public function execute($params = [], $fetch = null, $lastInsertID = false)
     {
         $this->pdo = $this->_db->prepare($this->query);
         $this->pdo->execute($params);
@@ -70,7 +98,11 @@ class Builder extends DB
             $this->pdo = $this->pdo->fetchAll();
         if ($fetch == "fetchObject")
             $this->pdo = $this->pdo->fetchObject();
-        return $this->pdo;
+        return !$lastInsertID ? $this->pdo : $this->_db->lastInsertId();
+    }
+
+    public function lastInsertId()
+    {
     }
 
 }
