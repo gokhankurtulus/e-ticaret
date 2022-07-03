@@ -1,21 +1,5 @@
 <?php
-require_once "App/User.php";
-$errorMsg = null;
-$successMsg = null;
-if (isset($_REQUEST['rgs'])) {
-    try {
-        $userForRegister = new User();
-        $userForRegister->setUsername = $_REQUEST['rgsUsername'];
-        $userForRegister->setName = $_REQUEST['rgsName'];
-        $userForRegister->setSurname = $_REQUEST['rgsSurname'];
-        $userForRegister->setMail = $_REQUEST['rgsMail'];
-        if ($userForRegister->validateInputs()) {
-            $successMsg = "Inputs validated";
-        }
-    } catch (Exception $ex) {
-        $errorMsg = $ex->getMessage();
-    }
-}
+
 ?>
 <link rel="stylesheet" href="assets/css/all.min.css">
 <link rel="stylesheet" href="assets/css/main.css">

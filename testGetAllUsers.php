@@ -1,12 +1,5 @@
 <?php
-require_once 'define.php';
 
-require_once "App/User.php";
-try {
-    $userClass = new User();
-    $users = $userClass->getAllUsers();
-} catch (Exception $ex) {
-}
 ?>
     <link rel="stylesheet" href="assets/css/main.css">
     <style>

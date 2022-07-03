@@ -1,16 +1,31 @@
 <?php
-require_once "App/User.php";
 session_start();
+
+spl_autoload_register(function ($class) {
+    if (is_file($class . '.php')) {
+        require_once($class . '.php');
+    }
+});
+
+use App\Providers\Provider;
+use App\Controllers\UserController;
+
+//if (isset($_SESSION['login'])) {
+//    header("Location: " . Provider::BASEURL);
+//    exit();
+//}
+Provider::boot();
 if (isset($_REQUEST['logout']))
     unset($_SESSION['login']);
 if (isset($_SESSION['login'])):
-    $loginedUser = new User();
-    $loginedUser->load($_SESSION['login']);
+    $loginedUser = UserController::get(['id' => $_SESSION['login']]);
     ?>
     <pre>
     <?php print_r($loginedUser); ?>
     </pre>
-    <form method="post"><button type="submit" name="logout" value="0">Logout</button></form>
+    <form method="post">
+        <button type="submit" name="logout" value="0">Logout</button>
+    </form>
 <?php else: ?>
     <link rel="stylesheet" href="assets/css/all.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
@@ -149,14 +164,15 @@ if (isset($_SESSION['login'])):
         <h3>Basic Login Form</h3>
         <p id="successMsg"></p>
         <p id="errorMsg"></p>
+        <input type="hidden" name="type" value="LoginviaUsername">
         <div class="inputDiv">
             <i class="fas fa-user"></i>
-            <input type="text" name="lgnUsername" onkeypress="blockChars(this);" pattern=".{6,20}" title="6-20 character" autocomplete="off"
+            <input type="text" name="username" onkeypress="blockChars(this);" pattern=".{6,20}" title="6-20 character" autocomplete="off"
                    placeholder="Username" required>
         </div>
         <div class="inputDiv">
             <i class="fas fa-key"></i>
-            <input type="password" name="lgnPassword" onkeypress="blockChars(this,'pw');" pattern=".{6,20}" title="6-20 character"
+            <input type="password" name="password" onkeypress="blockChars(this,'pw');" pattern=".{6,20}" title="6-20 character"
                    autocomplete="off"
                    placeholder="Password" required>
         </div>
