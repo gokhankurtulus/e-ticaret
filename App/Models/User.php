@@ -5,24 +5,24 @@ namespace App\Models;
 class User extends Model
 {
     protected static $table = 'user';
-    protected $id;
-    protected $username;
-    protected $name;
-    protected $surname;
-    protected $password;
+    private $id;
+    private $username;
+    private $name;
+    private $surname;
+    private $password;
 
-    protected $status;
+    private $status;
 
-    protected $mail;
-    protected $phone;
-    protected $identity;
-    protected $birthDate;
-    protected $birthDateDay;
-    protected $birthDateMonth;
-    protected $birthDateYear;
+    private $mail;
+    private $phone;
+    private $identity;
+    private $birthDate;
+    private $birthDateDay;
+    private $birthDateMonth;
+    private $birthDateYear;
 
-    protected $city;
-    protected $fullAddress;
+    private $city;
+    private $fullAddress;
 
     protected static function getTable()
     {
@@ -77,25 +77,6 @@ class User extends Model
         return false;
     }
 
-
-    public function register() //TODO changed, will remove
-    {
-        $this->setPassword = password_hash($this->setPassword, PASSWORD_DEFAULT);
-
-        $exist = $this->_db->prepare("SELECT * FROM user WHERE username = ? OR mail = ?");
-        $exist->execute([$this->setUsername, $this->setMail]);
-        $exist = $exist->fetch();
-        if (!$exist) {
-            $sql = "INSERT INTO user (username, name, surname, identity, password, phone, birth, mail, status) VALUES (?,?,?,?,?,?,?,?,?)";
-            $register = $this->_db->prepare($sql)->execute([$this->setUsername, $this->setName, $this->setSurname, $this->setIdentity, $this->setPassword, $this->setPhone, $this->setBirthDate, $this->setMail, $this->setStatus]);
-            if ($register)
-                return $this->_db->lastInsertId();
-            else
-                throw new \Exception('Failed to register.', 41);
-        } else
-            throw new \Exception('Username or mail exist.', 42);
-    }
-
     public function parseBirthDate()
     {
         $birthDateTime = new \DateTime($this->birthDate);
@@ -104,27 +85,6 @@ class User extends Model
         $this->birthDateYear = $birthDateTime->format('Y');
     }
 
-    public function validateInputs() //TODO changed, will remove
-    {
-        if (!(strlen($this->setUsername) >= 6 && strlen($this->setUsername) <= 20))
-            throw new \Exception('Username must be 6-20 character long.', 100);
-        if (!(strlen($this->setName) >= 2 && strlen($this->setName) <= 20))
-            throw new \Exception('Name must be 2-20 character long.', 101);
-        if (!(strlen($this->setSurname) >= 2 && strlen($this->setSurname) <= 20))
-            throw new \Exception('Surname must be 2-20 character long.', 102);
-        if (empty(trim($this->setMail)))
-            throw new \Exception('Email cannot be empty.', 103);
-        if (!preg_match("/^[a-zA-Z']*$/", $this->setUsername) || is_null($this->setUsername))
-            throw new \Exception('Only english characters allowed on username.', 104);
-        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setName) || is_null($this->setName))
-            throw new \Exception('Only letters and white space allowed on name.', 105);
-        if (!preg_match("/^[a-zA-ZğüşöçİĞÜŞÖÇ' ]*$/", $this->setSurname) || is_null($this->setSurname))
-            throw new \Exception('Only letters and white space allowed on surname.', 106);
-        if (!filter_var($this->setMail, FILTER_VALIDATE_EMAIL) || is_null($this->setMail))
-            throw new \Exception('Invalid email format: ' . $this->setMail, 107);
-
-        return true;
-    }
 
 
     public function validateIdentity() //TODO changed, will remove

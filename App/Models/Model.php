@@ -11,6 +11,25 @@ abstract class Model
 
     protected abstract static function getClass();
 
+    /**
+     * @param array $attributes
+     * @param $lastInsertID
+     * @param $fetch
+     * @return array|false|mixed|object|\PDOStatement|string
+     */
+    public static function create(array $attributes, $lastInsertID = true, $fetch = 'fetch')
+    {
+        $columns = [];
+        $values = [];
+        foreach ($attributes as $column => $value) {
+            $columns[] = $column;
+            $values[] = $value;
+        }
+        $query = new Builder();
+        $query->table = static::getTable();
+        $result = $query->create()->columns(columns: $columns)->execute(params: $values, fetch: $fetch, lastInsertID: $lastInsertID);
+        return $result;
+    }
 
     /**
      * @param $where
@@ -29,25 +48,16 @@ abstract class Model
     }
 
     /**
-     * @param $column
-     * @param $text
-     * @return mixed
-     */
-    public static function search($column, $search_text)
-    {
-        $query = new Builder();
-        $query->table = static::getTable();
-        $result = $query->search($column)->execute(params: [':search' => "+$search_text*"], fetch: 'fetchAll');
-        $result = self::loadFromResult($result);
-        return $result;
-    }
-
-    /**
      * @param $result
      * @return mixed
      */
     public static function loadFromResult($result): mixed
     {
+        if (count($result) == 1) {
+            $newClass = new (static::getClass());
+            $newClass->load($result[0]);
+            return $newClass;
+        }
         $classArray = [];
         if (count($result) > 1) {
             foreach ($result as $resource) {
@@ -57,27 +67,36 @@ abstract class Model
             }
             return $classArray;
         }
-        if (count($result) == 1) {
-            $newClass = new (static::getClass());
-            $newClass->load($result[0]);
-            return $newClass;
-        }
         return false;
     }
 
     /**
-     * @param $identifier
-     * @param $where
-     * @param $operator
+     * @param $column
+     * @param $text
+     * @return mixed
+     */
+    public static function search($column, $search_text): mixed
+    {
+        $query = new Builder();
+        $query->table = static::getTable();
+        $result = $query->search($column)->execute(params: [':search' => "+$search_text*"], fetch: 'fetchAll');
+        $result = self::loadFromResult($result);
+        return $result;
+    }
+
+    /**
+     * @param array $identifier
+     * @param array $where
+     * @param string $operator
      * @return array|false|mixed|object|\PDOStatement
      */
-    public static function set($identifier, $where = [], $operator = "AND",)
+    public static function update(array $attributes, $where = [], $operator = "AND",): mixed
     {
         $columns = [];
         $values = [];
-        foreach ($identifier as $column => $value) {
-            array_push($columns, $column);
-            array_push($values, $value);
+        foreach ($attributes as $column => $value) {
+            $columns[] = $column;
+            $values[] = $value;
         }
         $query = new Builder();
         $query->table = static::getTable();
@@ -86,10 +105,10 @@ abstract class Model
     }
 
     /**
-     * @param $where
+     * @param array $where
      * @return array|false|mixed|object|\PDOStatement
      */
-    public static function delete($where)
+    public static function delete(array $where): mixed
     {
         $query = new Builder();
         $query->table = static::getTable();
