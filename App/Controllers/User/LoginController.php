@@ -3,7 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\{Controller};
-use App\Middleware\User\{ValidateLoginCredentials};
+use App\Middleware\Auth\{ValidateLoginCredentials};
 use App\Providers\{Error, UserSettings};
 use App\Models\{User};
 

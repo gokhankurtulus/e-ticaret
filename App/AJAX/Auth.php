@@ -1,6 +1,4 @@
 <?php
-
-namespace App\Json\TestAJAX;
 error_reporting(0);
 session_start();
 spl_autoload_register(function ($class) {
@@ -21,7 +19,8 @@ if (isset($_REQUEST['type'])) {
     //register();
     if ($_REQUEST['type'] === 'logout') ;
     //logout();
-}
+} else
+    exit();
 function login()
 {
     if (isset($_REQUEST['type'])) {

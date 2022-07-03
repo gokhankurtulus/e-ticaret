@@ -96,7 +96,7 @@ let loginForm = "#loginForm";
 let loader = "#loader";
 let errorMsg = "#errorMsg";
 let successMsg = "#successMsg";
-let authUrI = "App/Json/Auth.php";
+let authUrI = "App/AJAX/Auth.php";
 if ($(loginForm).length) {
     $(loginForm).submit(function (event) {
         event.preventDefault();
