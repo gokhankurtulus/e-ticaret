@@ -66,20 +66,20 @@ if (isset($_REQUEST['type'])) {
 ?>
 <form method="post">
     <input type="hidden" name="type" value="LoginviaUsername">
-    <input type="text" name="username" value="gokhan">
+    <input type="text" name="username" value="">
     <input type="text" name="password" value="">
     <input type="submit" name="login">
 </form>
 
 <form method="post">
     <input type="hidden" name="type" value="LoginviaMail">
-    <input type="text" name="mail" value="gokhankurtulus@icloud.com">
+    <input type="text" name="mail" value="">
     <input type="text" name="password" value="">
     <input type="submit" name="login">
 </form>
 <form method="post">
     <input type="hidden" name="type" value="LoginviaPhone">
-    <input type="text" name="phone" value="(531) 971 - 9055">
+    <input type="text" name="phone" value="">
     <input type="text" name="password" value="">
     <input type="submit" name="login">
 </form>
