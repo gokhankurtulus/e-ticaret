@@ -96,30 +96,32 @@ let loginForm = "#loginForm";
 let loader = "#loader";
 let errorMsg = "#errorMsg";
 let successMsg = "#successMsg";
-let loginRegisterUrI = "testAJAX.php";
+let authUrI = "App/Json/Auth.php";
 if ($(loginForm).length) {
     $(loginForm).submit(function (event) {
         event.preventDefault();
         $(loader).css("display", "block");
-        var values = $(this).serialize();
+        let values = $(this).serialize();
         $.ajax({
-            url: loginRegisterUrI,
+            url: authUrI,
             type: "post",
             data: values,
             success: function (response) {
                 if (isJsonString(response)) {
                     response = $.parseJSON(response);
+                    $(errorMsg).css("display", "none");
                     $(successMsg).text("Logged in.");
                     $(successMsg).css("display", "block");
                     document.location.reload(true);
                 } else {
+                    $(successMsg).css("display", "none");
                     $(errorMsg).text(response);
                     $(errorMsg).css("display", "block");
                 }
                 $(loader).css("display", "none");
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
+                //console.log(textStatus, errorThrown);
             }
         }).done(function (data) {
             //console.log(data)
@@ -133,7 +135,7 @@ if ($(registerForm).length) {
         var values = $(this).serialize();
 
         $.ajax({
-            url: loginRegisterUrI,
+            url: authUrI,
             type: "post",
             data: values,
             success: function (response) {
