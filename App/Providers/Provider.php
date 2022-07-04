@@ -7,6 +7,7 @@ class Provider
     const BASEURL = "http://localhost/e-ticaret/";
     const APP_URL = self::BASEURL . "App/";
     const PUBLIC_URL = self::BASEURL . "public/";
+    const VIEW_URL = "public/views/";
 
     public static function boot()
     {
