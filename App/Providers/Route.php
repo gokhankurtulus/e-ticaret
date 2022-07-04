@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-enum Route
+enum Route: string
 {
-    case LOGIN;
-    case REGISTER;
-    case PROFILE;
-    case BASKET;
-    case ORDERS;
-    case PRODUCT;
+    case LOGIN = "login";
+    case REGISTER = "register";
+    case PROFILE = "profile";
+    case BASKET = "basket";
+    case ORDERS = "orders";
+    case PRODUCT = "product";
 
     public function url(string $slug = ''): string
     {

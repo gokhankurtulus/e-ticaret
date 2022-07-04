@@ -19,8 +19,10 @@ if (isset($_REQUEST['type'])) {
     //register();
     if ($_REQUEST['type'] === 'logout') ;
     //logout();
-} else
+} else {
+    echo Error::AUTH_TYPE_MISSING->message();
     exit();
+}
 function login()
 {
     if (isset($_REQUEST['type'])) {

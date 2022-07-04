@@ -4,7 +4,9 @@ namespace App\Providers;
 
 class Provider
 {
-    const BASEURL = 'http://localhost/e-ticaret/';
+    const BASEURL = "http://localhost/e-ticaret/";
+    const APP_URL = self::BASEURL . "App/";
+    const PUBLIC_URL = self::BASEURL . "public/";
 
     public static function boot()
     {
