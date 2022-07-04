@@ -4,6 +4,7 @@ namespace App\Providers;
 
 enum Route: string
 {
+    case INDEX = 'index';
     case LOGIN = "login";
     case REGISTER = "register";
     case PROFILE = "profile";
@@ -14,6 +15,7 @@ enum Route: string
     public function url(string $slug = ''): string
     {
         return match ($this) {
+            self::INDEX => Provider::BASEURL . "index",
             self::LOGIN => Provider::BASEURL . "login",
             self::REGISTER => Provider::BASEURL . "register",
             self::PROFILE => Provider::BASEURL . "profile",

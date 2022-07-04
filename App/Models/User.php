@@ -50,28 +50,8 @@ class User extends Model
             $this->birthDate = $resource['birth'];
             $this->city = $resource['city'];
             $this->fullAddress = $resource['address'];
-            $this->parseBirthDate();
-            return true;
-        }
-        return false;
-    }
-
-    public function login($username, $password) //TODO changed, will remove
-    {
-        if (is_null($username) || trim($username) == '' || is_null($password) || trim($password) == '')
-            throw new \Exception('Username or password cannot be null.', 31);
-        $login = $this->_db->prepare("SELECT * FROM user WHERE username =?");
-        $login->execute([$username]);
-        $login = $login->fetch();
-        if (!$login)
-            throw new \Exception('User not found.', 32);
-        if ($login['status'] == Banned)
-            throw new \Exception('Banned user.', 33);
-        $passwordCheck = password_verify($password, $login['password']);
-        if (!$passwordCheck)
-            throw new \Exception('Password doesnt match.', 34);
-        if ($login && $login['status'] >= 1 && $passwordCheck) {
-            $this->load($login['id']);
+            if ($this->birthDate)
+                $this->parseBirthDate();
             return true;
         }
         return false;
@@ -84,7 +64,6 @@ class User extends Model
         $this->birthDateMonth = $birthDateTime->format('m');
         $this->birthDateYear = $birthDateTime->format('Y');
     }
-
 
 
     public function validateIdentity() //TODO changed, will remove

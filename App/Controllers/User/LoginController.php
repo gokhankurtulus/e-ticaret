@@ -4,7 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\{Controller};
 use App\Middleware\Auth\{ValidateLoginCredentials};
-use App\Providers\{Error, UserSettings};
+use App\Providers\{Error, UserSettings, Role};
 use App\Models\{User};
 
 class LoginController extends Controller

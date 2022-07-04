@@ -8,18 +8,31 @@ enum Error
     case NULL_OR_EMPTY_STRING;
     case STRING_LENGHT_BETWEEN;
     case LETTERS_WITHOUT_WHITESPACE;
+    case LETTERS_WITH_WHITESPACE;
     case TR_LETTERS_WITH_WHITESPACE;
+    case AUTH_TYPE_MISSING;
+    case FORM_PARAMETER_MISSING;
+
+    case NOT_ALLOWED_SEARCH;
     case NOT_ALLOWED_USERNAME;
+    case NOT_ALLOWED_NAME;
+    case NOT_ALLOWED_SURNAME;
     case NOT_ALLOWED_PASSWORD;
+    case NOT_MATCHED_PASSWORD;
     case NOT_EMAIL;
     case NOT_FORMATTED_PHONE;
-
-    case AUTH_TYPE_MISSING;
-    case USER_NOT_FOUND;
+    case NOT_ID;
     case NOT_OBJECT;
+
+    case USER_NOT_FOUND;
     case WRONG_PASSWORD;
     case PASSWORD_LENGHT;
+    case USER_EXIST;
+    case USERNAME_EXIST;
     case BANNED;
+
+    case NOTHING_CHANGED;
+    case UPDATE_FAILED;
 
     public function message(): string
     {
@@ -28,18 +41,31 @@ enum Error
             self::NULL_OR_EMPTY_STRING => 'Null veya boş string',
             self::STRING_LENGHT_BETWEEN => 'Karakter sayısı belirtilen değerler arasında değil',
             self::LETTERS_WITHOUT_WHITESPACE => 'Yanlızca ingilizce karakter içerebilir',
+            self::LETTERS_WITH_WHITESPACE => 'Yanlızca ingilizce karakter ve boşluk içerebilir',
             self::TR_LETTERS_WITH_WHITESPACE => 'Yanlızca türkçe karakter ve boşluk içerebilir',
+            self::AUTH_TYPE_MISSING => 'Authentication type bulunamadı',
+            self::FORM_PARAMETER_MISSING => 'Form parametreleri eksik',
+
+            self::NOT_ALLOWED_SEARCH => 'Arama istenilen biçimde değil',
             self::NOT_ALLOWED_USERNAME => 'Kullanıcı adı istenilen biçimde değil',
+            self::NOT_ALLOWED_NAME => 'Ad istenilen biçimde değil',
+            self::NOT_ALLOWED_SURNAME => 'Soyad istenilen biçimde değil',
             self::NOT_ALLOWED_PASSWORD => 'Şifre istenilen biçimde değil',
+            self::NOT_MATCHED_PASSWORD => 'Şifreler uyuşmuyor',
             self::NOT_EMAIL => 'Mail standartları karşılamıyor',
             self::NOT_FORMATTED_PHONE => 'Telefon numarası istenilen standartları karşılamıyor',
-
-            self::AUTH_TYPE_MISSING => 'Authentication type bulunamadı',
-            self::USER_NOT_FOUND => 'Kullanıcı bulunamadı',
+            self::NOT_ID => 'ID değil',
             self::NOT_OBJECT => 'Obje değil',
+
+            self::USER_NOT_FOUND => 'Kullanıcı bulunamadı',
             self::WRONG_PASSWORD => 'Yanlış şifre',
             self::PASSWORD_LENGHT => 'Şifre uzunluğu istenilen biçimde değil',
-            self::BANNED => 'Kullanıcı Yasaklı'
+            self::USER_EXIST => 'Girilen kullanıcı adı veya mail ile daha önce hesap oluşturulmuş',
+            self::USERNAME_EXIST => 'Kullanıcı adı mevcut',
+            self::BANNED => 'Kullanıcı Yasaklı',
+
+            self::NOTHING_CHANGED => 'Değerler aynı olduğu için değişiklik yapılmadı',
+            self::UPDATE_FAILED => 'Update false döndürdü'
         };
     }
 }

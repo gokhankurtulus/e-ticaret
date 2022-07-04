@@ -3,19 +3,15 @@
 namespace App\Middleware\User;
 
 use App\Models\User;
+use App\Providers\Error;
 
 class CheckUsernameExist
 {
-    protected static $status = true;
 
     public static function handle($request)
     {
         $checkExist = User::get(where: ['username' => $request['username']]);
-        if ($checkExist)
-            self::$status = true;
-        else
-            self::$status = false;
-        return self::$status;
+        return $checkExist ? Error::USERNAME_EXIST : Error::SUCCESS;
     }
 
 }

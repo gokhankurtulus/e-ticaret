@@ -10,14 +10,24 @@ class Functions
         return (is_null($str) || empty(trim($str)));
     }
 
+    public static function isContainNumbers(string $str): bool
+    {
+        return (preg_match("/^[0-9]*$/", $str) && !self::IsNullOrEmptyString($str));
+    }
+
     public static function isStringLenghtBetween(string $str, int $min, int $max): bool
     {
-        return ((strlen($str) >= $min && strlen($str) <= $max));
+        return (strlen($str) >= $min && strlen($str) <= $max);
     }
 
     public static function isLettersWithoutWhitespace($str): bool
     {
         return (preg_match("/^[a-zA-Z]*$/", $str) && !self::IsNullOrEmptyString($str) && is_string($str));
+    }
+
+    public static function isLettersWithWhitespace($str): bool
+    {
+        return (preg_match("/^[a-zA-Z ]*$/", $str) && !self::IsNullOrEmptyString($str) && is_string($str));
     }
 
     public static function isTurkishLettersWithWhitespace($str): bool
@@ -38,6 +48,16 @@ class Functions
     public static function isAllowedPassword($str)
     {
         return (preg_match("/^[\w!@#$%'\"&*()=+\\\\\/.{}-]*$/", $str) && !self::IsNullOrEmptyString($str) && is_string($str));
+    }
+
+    public static function isPasswordsMatch(string $password, string $passwordCheck)
+    {
+        return ($password === $passwordCheck);
+    }
+
+    public static function isAllowedSearch($str): bool
+    {
+        return (preg_match("/^[a-zA-ZığüşöçİĞÜŞÖÇ'\" ]*$/", $str) && !self::IsNullOrEmptyString($str) && is_string($str));
     }
 
     public static function createSlug(string $str, $delimiter = '-'): string

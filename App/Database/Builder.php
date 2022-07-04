@@ -80,8 +80,8 @@ class Builder extends DB
         if ($where != []) {
             $this->query .= " WHERE";
             $identifierElements = "";
-            foreach ($where as $key => $value)
-                $value != end($where) ? $identifierElements .= " $key = '$value' $operator" : $identifierElements .= " $key = '$value'";
+            foreach ($where as $column)
+                $column != end($where) ? $identifierElements .= " $column = ? $operator" : $identifierElements .= " $column = ?";
             $this->query .= $identifierElements;
         }
         return $this;

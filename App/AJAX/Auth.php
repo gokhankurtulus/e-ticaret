@@ -9,20 +9,19 @@ spl_autoload_register(function ($class) {
     }
 });
 
-use App\Controllers\User\LoginController;
+use App\Controllers\User\{LoginController, RegisterController};
 use App\Providers\Error;
 
 if (isset($_REQUEST['type'])) {
     if ($_REQUEST['type'] === 'LoginviaUsername' || $_REQUEST['type'] === 'LoginviaMail' || $_REQUEST['type'] === 'LoginviaPhone')
         login();
-    if ($_REQUEST['type'] === 'register') ;
-    //register();
-    if ($_REQUEST['type'] === 'logout') ;
-    //logout();
+    if ($_REQUEST['type'] === 'Register')
+        register();
 } else {
     echo Error::AUTH_TYPE_MISSING->message();
     exit();
 }
+
 function login()
 {
     $login = LoginController::authenticate($_REQUEST);
@@ -32,4 +31,14 @@ function login()
         echo json_encode($loginInfo);
     } else
         echo $login->message();
+}
+
+function register()
+{
+    $register = RegisterController::authenticate($_REQUEST);
+    if (!is_a($register, Error::class)) {
+        $registerInfo = array("id" => $register);
+        echo json_encode($registerInfo);
+    } else
+        echo $register->message();
 }

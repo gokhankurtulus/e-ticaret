@@ -3,6 +3,7 @@
 namespace App\Middleware\User;
 
 use App\Models\User;
+use App\Providers\Error;
 
 class CheckCredentialsExist
 {
@@ -12,9 +13,8 @@ class CheckCredentialsExist
     {
         $checkExist = User::get(where: ['username' => $request['username'], 'mail' => $request['mail']], operator: 'OR');
         if ($checkExist)
-            self::$status = true;
+            return Error::USER_EXIST;
         else
-            self::$status = false;
-        return self::$status;
+            return Error::SUCCESS;
     }
 }

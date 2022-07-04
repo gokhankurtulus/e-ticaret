@@ -39,9 +39,15 @@ abstract class Model
      */
     public static function get($where = [], $operator = "AND", $fetch = 'fetchAll'): mixed
     {
+        $columns = [];
+        $values = [];
+        foreach ($where as $column => $value) {
+            $columns[] = $column;
+            $values[] = $value;
+        }
         $query = new Builder();
         $query->table = static::getTable();
-        if ($where != []) $result = $query->get()->where($where, $operator)->execute(fetch: $fetch);
+        if ($where != []) $result = $query->get()->where($columns, $operator)->execute(params: $values, fetch: $fetch);
         if ($where == []) $result = $query->get()->execute(fetch: $fetch);
         $result = self::loadFromResult($result);
         return $result;
@@ -90,17 +96,22 @@ abstract class Model
      * @param string $operator
      * @return array|false|mixed|object|\PDOStatement
      */
-    public static function update(array $attributes, $where = [], $operator = "AND",): mixed
+    public static function update(array $attributes, array $where, $operator = "AND",): mixed
     {
-        $columns = [];
+        $settingColumns = [];
+        $whereColumns = [];
         $values = [];
         foreach ($attributes as $column => $value) {
-            $columns[] = $column;
+            $settingColumns[] = $column;
+            $values[] = $value;
+        }
+        foreach ($where as $column => $value) {
+            $whereColumns[] = $column;
             $values[] = $value;
         }
         $query = new Builder();
         $query->table = static::getTable();
-        $result = $query->update()->columns($columns)->where($where, $operator)->execute(params: $values);
+        $result = $query->update()->columns($settingColumns)->where($whereColumns, $operator)->execute(params: $values)->rowCount();
         return $result;
     }
 
