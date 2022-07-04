@@ -100,9 +100,4 @@ class Builder extends DB
             $this->pdo = $this->pdo->fetchObject();
         return !$lastInsertID ? $this->pdo : $this->_db->lastInsertId();
     }
-
-    public function lastInsertId()
-    {
-    }
-
 }

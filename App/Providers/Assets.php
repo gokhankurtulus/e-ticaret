@@ -10,14 +10,14 @@ enum Assets
     case IMG;
     case MEDIA;
 
-    public function path(string $slug = ""): string
+    public function path(string $file = ""): string
     {
         return match ($this) {
-            self::BASE => Provider::PUBLIC_URL . "assets/$slug",
-            self::CSS => self::BASE->path() . "css/$slug",
-            self::JS => self::BASE->path() . "js/$slug",
-            self::IMG => self::BASE->path() . "img/$slug",
-            self::MEDIA => self::BASE->path() . "media/$slug",
+            self::BASE => Provider::PUBLIC_URL . "assets/$file",
+            self::CSS => self::BASE->path() . "css/$file",
+            self::JS => self::BASE->path() . "js/$file",
+            self::IMG => self::BASE->path() . "img/$file",
+            self::MEDIA => self::BASE->path() . "media/$file",
         };
     }
 }

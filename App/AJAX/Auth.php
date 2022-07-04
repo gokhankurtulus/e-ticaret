@@ -25,22 +25,11 @@ if (isset($_REQUEST['type'])) {
 }
 function login()
 {
-    if (isset($_REQUEST['type'])) {
-        if ($_REQUEST['type'] === 'LoginviaUsername')
-            $login = LoginController::authenticate($_REQUEST);
-        else if ($_REQUEST['type'] === 'LoginviaMail')
-            $login = LoginController::authenticate($_REQUEST);
-        else if ($_REQUEST['type'] === 'LoginviaPhone')
-            $login = LoginController::authenticate($_REQUEST);
-        else {
-            echo Error::AUTH_TYPE_MISSING->message();
-            exit();
-        }
-        if (!is_a($login, Error::class)) {
-            $_SESSION['login'] = $login;
-            $loginInfo = array("id" => $login);
-            echo json_encode($loginInfo);
-        } else
-            echo $login->message();
-    }
+    $login = LoginController::authenticate($_REQUEST);
+    if (!is_a($login, Error::class)) {
+        $_SESSION['login'] = $login;
+        $loginInfo = array("id" => $login);
+        echo json_encode($loginInfo);
+    } else
+        echo $login->message();
 }
