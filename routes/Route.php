@@ -22,6 +22,8 @@ class Route
         }
         if (self::$page == '')
             self::$page = 'index';
+        if (self::$page == 'panel' && self::$action == '')
+            self::$action = 'index';
     }
 
     public function getUrl()

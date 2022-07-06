@@ -1,4 +1,8 @@
 RewriteEngine On
+#RewriteCond %{THE_REQUEST} /([^.]+).php [NC]
+#RewriteRule ^ /%1 [NC,L,R]
+RewriteCond %{THE_REQUEST} /([^.]+).phtml [NC]
+RewriteRule ^ /%1 [NC,L,R]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ index.php [QSA,L]
 <IfModule mod_headers.c>
