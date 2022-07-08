@@ -25,6 +25,10 @@ class LoginController extends Controller
             else if ($credentials['type'] === 'LoginviaPhone')
                 $user = User::get(where: ['BINARY phone' => $credentials['phone']]);
             if (isset($user) && is_object($user)) {
+                if ($user->getStatus() == Role::PASSIVE_ACCOUNT->value())
+                    return Error::PASSIVE_ACCOUNT;
+                if ($user->getRole() == Role::BANNED->value())
+                    return Error::BANNED;
                 if (password_verify($credentials['password'], $user->getPassword()))
                     return $user->getID();
                 else

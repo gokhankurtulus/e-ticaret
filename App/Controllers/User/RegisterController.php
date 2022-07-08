@@ -26,7 +26,9 @@ class RegisterController extends Controller
                         'surname' => $credentials['surname'],
                         'mail' => $credentials['mail'],
                         'password' => password_hash($credentials['password'], PASSWORD_DEFAULT),
-                        'status' => Role::USER->value()
+                        'status' => Role::ACTIVE_ACCOUNT->value(),
+                        'verified' => Role::NOT_VERIFIED_ACCOUNT->value(),
+                        'role' => Role::USER->value()
                     ]);
                 return $createUser;
             }

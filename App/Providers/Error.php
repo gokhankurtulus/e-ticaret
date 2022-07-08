@@ -29,6 +29,7 @@ enum Error
     case PASSWORD_LENGHT;
     case USER_EXIST;
     case USERNAME_EXIST;
+    case PASSIVE_ACCOUNT;
     case BANNED;
 
     case NOTHING_CHANGED;
@@ -62,7 +63,8 @@ enum Error
             self::PASSWORD_LENGHT => 'Şifre uzunluğu istenilen biçimde değil',
             self::USER_EXIST => 'Girilen kullanıcı adı veya mail ile daha önce hesap oluşturulmuş',
             self::USERNAME_EXIST => 'Kullanıcı adı mevcut',
-            self::BANNED => 'Kullanıcı Yasaklı',
+            self::PASSIVE_ACCOUNT => 'Pasif hesap',
+            self::BANNED => 'Kullanıcı yasaklı',
 
             self::NOTHING_CHANGED => 'Değerler aynı olduğu için değişiklik yapılmadı',
             self::UPDATE_FAILED => 'Update false döndürdü'

@@ -6,7 +6,6 @@ namespace App\Providers;
 enum Link: string
 {
     case BASE = '';
-    case PANEL_BASE = 'panel/';
     case INDEX = 'index';
 
     case FAQ = "faq";
@@ -24,7 +23,6 @@ enum Link: string
     case AGREEMENT = "agreement";
 
     case SEARCH = "search";
-    case PANEL_SEARCH = "panel/search";
     case LOGIN = "login";
     case LOGOUT = "logout";
     case REGISTER = "register";
@@ -35,11 +33,14 @@ enum Link: string
     case CATEGORY = "category";
     case PRODUCT = "product";
 
+
+    case PANEL_BASE = 'panel/';
+    case PANEL_SEARCH = "panel/search";
+
     public function url(string $slug = '', string $language = 'tr'): string
     {
         return match ($this) {
             self::BASE => Provider::BASEURL . "$language/",
-            self::PANEL_BASE => Provider::PANELURL . "$language/",
             self::INDEX => Provider::BASEURL . "$language/index",
 
             self::FAQ => Provider::BASEURL . "$language/faq",
@@ -57,8 +58,7 @@ enum Link: string
             self::AGREEMENT => Provider::BASEURL . "$language/agreement",
 
             self::SEARCH => Provider::BASEURL . "$language/search",
-            self::PANEL_SEARCH => Provider::PANELURL . "$language/search",
-            self::LOGIN => Provider::BASEURL . "$language/login",
+            self::LOGIN => Provider::BASEURL . "$language/login/$slug",
             self::LOGOUT => Provider::BASEURL . "$language/logout",
             self::REGISTER => Provider::BASEURL . "$language/register",
             self::FORGOT_PASSWORD => Provider::BASEURL . "$language/forgot-password",
@@ -67,6 +67,10 @@ enum Link: string
             self::ORDERS => Provider::BASEURL . "$language/orders",
             self::CATEGORY => Provider::BASEURL . "$language/category/$slug",
             self::PRODUCT => Provider::BASEURL . "$language/product/$slug",
+
+
+            self::PANEL_BASE => Provider::BASEURL . "$language/panel/",
+            self::PANEL_SEARCH => Provider::BASEURL . "$language/panel/search",
         };
     }
 }

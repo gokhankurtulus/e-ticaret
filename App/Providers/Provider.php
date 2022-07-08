@@ -8,7 +8,6 @@ use App\Providers\Route as Route;
 class Provider
 {
     const BASEURL = "http://localhost/e-ticaret/";
-    const PANELURL = "http://localhost/e-ticaret/panel/";
     const APP_URL = self::BASEURL . "App/";
     const PUBLIC_URL = self::BASEURL . "public/";
     const VIEW_URL = "public/views/";

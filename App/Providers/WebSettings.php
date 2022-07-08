@@ -7,6 +7,7 @@ enum WebSettings
     case HOME;
     case MENU;
     case BASKET;
+    case PANEL;
 
     case ACCOUNT;
     case LOGIN;
@@ -18,12 +19,15 @@ enum WebSettings
     case USERNAME_LONG;
     case USERNAME_ALLOWED_CHARS;
     case NAME;
+    case NAME_LONG;
     case SURNAME;
+    case SURNAME_LONG;
     case EMAIL;
     case PASSWORD;
     case PASSWORD_CHECK;
     case PASSWORD_LONG;
     case PASSWORD_ALLOWED_CHARS;
+    case PHONE;
     case AGREE_TEXT;
 
     case SEARCH;
@@ -58,11 +62,16 @@ enum WebSettings
             $usernameMaxChar = UserSettings::UsernameMaxChar;
             $passwordMinChar = UserSettings::PasswordMinChar;
             $passwordMaxChar = UserSettings::PasswordMaxChar;
+            $nameMinChar = UserSettings::NameMinChar;
+            $nameMaxChar = UserSettings::NameMaxChar;
+            $surnameMinChar = UserSettings::SurnameMinChar;
+            $surnameMaxChar = UserSettings::SurnameMaxChar;
             if ($language === 'tr') {
                 return match ($this) {
                     self::HOME => 'Anasayfa',
                     self::MENU => 'Menü',
                     self::BASKET => 'Sepet',
+                    self::PANEL => 'Panel',
 
                     self::ACCOUNT => 'Hesap',
                     self::LOGIN => 'Giriş Yap',
@@ -74,12 +83,15 @@ enum WebSettings
                     self::USERNAME_LONG =>  "$usernameMinChar-$usernameMaxChar karakter uzunluğunda",
                     self::USERNAME_ALLOWED_CHARS =>  "a-Z karakterler",
                     self::NAME => 'Ad',
+                    self::NAME_LONG =>  "$nameMinChar-$nameMaxChar karakter uzunluğunda",
                     self::SURNAME => 'Soyad',
+                    self::SURNAME_LONG =>  "$surnameMinChar-$surnameMaxChar karakter uzunluğunda",
                     self::EMAIL => 'E-mail',
                     self::PASSWORD => 'Şifre',
                     self::PASSWORD_CHECK => 'Şifre Kontrol',
                     self::PASSWORD_LONG =>  "$passwordMinChar-$passwordMaxChar karakter uzunluğunda",
                     self::PASSWORD_ALLOWED_CHARS =>  "a-Z, 0-9, !@#$%&*()=+.{}- karakterler",
+                    self::PHONE =>  "Telefon",
                     self::AGREE_TEXT => 'Hesap Oluştur\'a tıklayarak Koşullarımızı, Veri Politikamızı ve Çerez Politikamızı kabul etmiş olursunuz. Bizden SMS bildirimleri alabilir ve istediğiniz zaman vazgeçebilirsiniz.',
 
                     self::SEARCH => 'Ara',
@@ -111,6 +123,7 @@ enum WebSettings
                     self::HOME => 'Home',
                     self::MENU => 'Menu',
                     self::BASKET => 'Basket',
+                    self::PANEL => 'Panel',
 
                     self::ACCOUNT => 'Account',
                     self::LOGIN => 'Sign In',
@@ -122,12 +135,15 @@ enum WebSettings
                     self::USERNAME_LONG =>  "$usernameMinChar-$usernameMaxChar character length",
                     self::USERNAME_ALLOWED_CHARS =>  "a-Z characters",
                     self::NAME => 'Name',
+                    self::NAME_LONG =>  "$nameMinChar-$nameMaxChar character length",
                     self::SURNAME => 'Surname',
+                    self::SURNAME_LONG =>  "$surnameMinChar-$surnameMaxChar character length",
                     self::EMAIL => 'E-mail',
                     self::PASSWORD => 'Password',
                     self::PASSWORD_CHECK => 'Password Check',
                     self::PASSWORD_LONG =>  "$passwordMinChar-$passwordMaxChar character length",
                     self::PASSWORD_ALLOWED_CHARS =>  "a-Z, 0-9, !@#$%&*()=+.{}- characters",
+                    self::PHONE =>  "Mobile",
                     self::AGREE_TEXT => 'By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. You may receive SMS notifications from us and can opt out at any time.',
 
                     self::SEARCH => 'Search',
@@ -161,6 +177,7 @@ enum WebSettings
                     self::HOME => 'домашняя страница',
                     self::MENU => 'Меню',
                     self::BASKET => 'Корзина',
+                    self::PANEL => 'Панель',
 
                     self::ACCOUNT => 'аккаунте',
                     self::LOGIN => 'авторизоваться',
@@ -172,12 +189,15 @@ enum WebSettings
                     self::USERNAME_LONG =>  "$usernameMinChar-$usernameMaxChar длина символа",
                     self::USERNAME_ALLOWED_CHARS =>  "a-Z персонажи",
                     self::NAME => 'Имя',
+                    self::NAME_LONG =>  "$surnameMinChar-$surnameMaxChar длина символа",
                     self::SURNAME => 'Фамилия',
+                    self::SURNAME_LONG =>  "$surnameMinChar-$surnameMaxChar длина символа",
                     self::EMAIL => 'Эл. адрес',
                     self::PASSWORD => 'Пароль',
                     self::PASSWORD_CHECK => 'Проверка пароля',
                     self::PASSWORD_LONG =>  "$passwordMinChar-$passwordMaxChar длина символа",
                     self::PASSWORD_ALLOWED_CHARS =>  "a-Z, 0-9, !@#$%&*()=+.{}- персонажи",
+                    self::PHONE =>  "Телефон",
                     self::AGREE_TEXT => 'Нажимая «Зарегистрироваться», вы соглашаетесь с нашими Условиями, Политикой данных и Политикой использования файлов cookie. Вы можете получать от нас SMS-уведомления и в любой момент можете отказаться от них.',
 
                     self::SEARCH => 'Поиск',

@@ -12,6 +12,8 @@ class User extends Model
     private $password;
 
     private $status;
+    private $verified;
+    private $role;
 
     private $mail;
     private $phone;
@@ -44,6 +46,8 @@ class User extends Model
             $this->surname = $resource['surname'];
             $this->password = $resource['password'];
             $this->status = $resource['status'];
+            $this->verified = $resource['verified'];
+            $this->role = $resource['role'];
             $this->mail = $resource['mail'];
             $this->phone = $resource['phone'];
             $this->identity = $resource['identity'];
@@ -117,6 +121,16 @@ class User extends Model
     public function getStatus()
     {
         return $this->status;
+    }
+
+    public function getVerified()
+    {
+        return $this->verified;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
     }
 
     public function getMail()
