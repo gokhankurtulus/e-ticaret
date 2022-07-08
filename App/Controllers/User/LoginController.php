@@ -19,11 +19,11 @@ class LoginController extends Controller
         $status = self::middleware(ValidateLoginCredentials::class, $credentials);
         if ($status === Error::SUCCESS) {
             if ($credentials['type'] === 'LoginviaUsername')
-                $user = User::get(where: ['username' => $credentials['username']]);
+                $user = User::get(where: ['BINARY username' => $credentials['username']]);
             else if ($credentials['type'] === 'LoginviaMail')
-                $user = User::get(where: ['mail' => $credentials['mail']]);
+                $user = User::get(where: ['BINARY mail' => $credentials['mail']]);
             else if ($credentials['type'] === 'LoginviaPhone')
-                $user = User::get(where: ['phone' => $credentials['phone']]);
+                $user = User::get(where: ['BINARY phone' => $credentials['phone']]);
             if (isset($user) && is_object($user)) {
                 if (password_verify($credentials['password'], $user->getPassword()))
                     return $user->getID();
