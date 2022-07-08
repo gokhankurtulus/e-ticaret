@@ -1,59 +1,60 @@
 <?php
 
 namespace App\Providers;
-
-enum Route: string
+class Route
 {
-    case BASE = '';
-    case INDEX = 'index';
+    protected static $requestUrl;
+    protected static $language;
+    protected static $page;
+    protected static $action;
+    protected static $sort;
+    protected static $pagination;
 
-    case FAQ = "faq";
-    case REFUND = "refund";
-    case PAYMENT = "payment";
-
-    case ABOUT_US = "about";
-    case PARTNERS = "partners";
-    case STORES = "stores";
-    case CAREER = "career";
-    case CONTACT = "contact";
-
-    case PRIVACY = "privacy";
-    case COOKIES = "cookies";
-    case AGREEMENT = "agreement";
-
-    case LOGIN = "login";
-    case REGISTER = "register";
-    case PROFILE = "profile";
-    case BASKET = "basket";
-    case ORDERS = "orders";
-    case PRODUCT = "product";
-
-    public function url(string $slug = ''): string
+    public function get()
     {
-        return match ($this) {
-            self::BASE => Provider::BASEURL . "",
-            self::INDEX => Provider::BASEURL . "index",
+        self::$requestUrl = $_SERVER['REQUEST_URI'];
+        try {
+            $parsed_url = explode('/', self::$requestUrl);
+            self::$language = $parsed_url[2];
+            self::$page = $parsed_url[3];
+            self::$action = $parsed_url[4];
+            self::$sort = $parsed_url[5];
+            self::$pagination = $parsed_url[6];
+        } catch (\Exception $exception) {
+        }
+        if (self::$page == '')
+            self::$page = 'index';
+        else if (self::$page == 'panel' && self::$action == '')
+            self::$action = 'index';
+    }
 
-            self::FAQ => Provider::BASEURL . "faq",
-            self::REFUND => Provider::BASEURL . "refund",
-            self::PAYMENT => Provider::BASEURL . "payment",
+    public function getUrl()
+    {
+        return self::$requestUrl;
+    }
 
-            self::ABOUT_US => Provider::BASEURL . "about",
-            self::PARTNERS => Provider::BASEURL . "partners",
-            self::STORES => Provider::BASEURL . "stores",
-            self::CAREER => Provider::BASEURL . "career",
-            self::CONTACT => Provider::BASEURL . "contact",
+    public function getLanguage()
+    {
+        return self::$language;
+    }
 
-            self::PRIVACY => Provider::BASEURL . "privacy",
-            self::COOKIES => Provider::BASEURL . "cookies",
-            self::AGREEMENT => Provider::BASEURL . "agreement",
+    public function getPage()
+    {
+        return self::$page;
+    }
 
-            self::LOGIN => Provider::BASEURL . "login",
-            self::REGISTER => Provider::BASEURL . "register",
-            self::PROFILE => Provider::BASEURL . "profile",
-            self::BASKET => Provider::BASEURL . "basket",
-            self::ORDERS => Provider::BASEURL . "orders",
-            self::PRODUCT => Provider::BASEURL . "product/$slug",
-        };
+    public function getAction()
+    {
+        return self::$action;
+    }
+
+    public function getSort()
+    {
+        return self::$sort;
+    }
+
+    public function getPagination()
+    {
+        return self::$pagination;
     }
 }

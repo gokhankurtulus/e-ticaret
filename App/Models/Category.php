@@ -6,6 +6,9 @@ class Category extends Model
     protected static $table = 'categories';
     private $id;
     private $name;
+    private $trName;
+    private $enName;
+    private $ruName;
     private $slug;
     private $parent;
     private $status;
@@ -28,6 +31,9 @@ class Category extends Model
         if (!empty($resource)) {
             $this->id = $resource['id'];
             $this->name = $resource['name'];
+            $this->trName = $resource['tr_name'];
+            $this->enName = $resource['en_name'];
+            $this->ruName = $resource['ru_name'];
             $this->parent = $resource['parent'];
             $this->slug = $resource['slug'];
             $this->status = $resource['status'];
@@ -69,6 +75,34 @@ class Category extends Model
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getTrName()
+    {
+        return $this->trName;
+    }
+
+    public function getEnName()
+    {
+        return $this->enName;
+    }
+
+    public function getRuName()
+    {
+        return $this->ruName;
+    }
+
+    public function getNameByLanguage(string $language)
+    {
+        if (in_array($language, $GLOBALS['allowed_languages'])) {
+            if ($language === 'tr')
+                return $this->trName;
+            else if ($language === 'en')
+                return $this->enName;
+            else if ($language === 'ru')
+                return $this->ruName;
+        }
+        return $this->getName($GLOBALS['default_language']);
     }
 
     public function getSlug()

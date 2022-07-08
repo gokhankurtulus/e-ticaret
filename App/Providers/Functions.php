@@ -47,7 +47,7 @@ class Functions
 
     public static function isAllowedPassword($str)
     {
-        return (preg_match("/^[\w!@#$%'\"&*()=+\\\\\/.{}-]*$/", $str) && !self::IsNullOrEmptyString($str) && is_string($str));
+        return (preg_match("/^[\w!@#$%&*()=+.{}-]*$/", $str) && !self::IsNullOrEmptyString($str) && is_string($str));
     }
 
     public static function isPasswordsMatch(string $password, string $passwordCheck)
