@@ -31,6 +31,7 @@ enum WebSettings
     case AGREE_TEXT;
 
     case SEARCH;
+    case SEARCH_RESULT;
     case PROFILE;
     case SETTINGS;
 
@@ -80,21 +81,22 @@ enum WebSettings
                     self::LOGOUT => 'Çıkış Yap',
 
                     self::USERNAME => 'Kullanıcı Adı',
-                    self::USERNAME_LONG =>  "$usernameMinChar-$usernameMaxChar karakter uzunluğunda",
-                    self::USERNAME_ALLOWED_CHARS =>  "a-Z karakterler",
+                    self::USERNAME_LONG => "$usernameMinChar-$usernameMaxChar karakter uzunluğunda",
+                    self::USERNAME_ALLOWED_CHARS => "a-Z karakterler",
                     self::NAME => 'Ad',
-                    self::NAME_LONG =>  "$nameMinChar-$nameMaxChar karakter uzunluğunda",
+                    self::NAME_LONG => "$nameMinChar-$nameMaxChar karakter uzunluğunda",
                     self::SURNAME => 'Soyad',
-                    self::SURNAME_LONG =>  "$surnameMinChar-$surnameMaxChar karakter uzunluğunda",
+                    self::SURNAME_LONG => "$surnameMinChar-$surnameMaxChar karakter uzunluğunda",
                     self::EMAIL => 'E-mail',
                     self::PASSWORD => 'Şifre',
                     self::PASSWORD_CHECK => 'Şifre Kontrol',
-                    self::PASSWORD_LONG =>  "$passwordMinChar-$passwordMaxChar karakter uzunluğunda",
-                    self::PASSWORD_ALLOWED_CHARS =>  "a-Z, 0-9, !@#$%&*()=+.{}- karakterler",
-                    self::PHONE =>  "Telefon",
+                    self::PASSWORD_LONG => "$passwordMinChar-$passwordMaxChar karakter uzunluğunda",
+                    self::PASSWORD_ALLOWED_CHARS => "a-Z, 0-9, !@#$%&*()=+.{}- karakterler",
+                    self::PHONE => "Telefon",
                     self::AGREE_TEXT => 'Hesap Oluştur\'a tıklayarak Koşullarımızı, Veri Politikamızı ve Çerez Politikamızı kabul etmiş olursunuz. Bizden SMS bildirimleri alabilir ve istediğiniz zaman vazgeçebilirsiniz.',
 
                     self::SEARCH => 'Ara',
+                    self::SEARCH_RESULT => 'Arama Sonuçları',
                     self::PROFILE => 'Profil',
                     self::SETTINGS => 'Ayarlar',
 
@@ -132,21 +134,22 @@ enum WebSettings
                     self::LOGOUT => 'Sign Out',
 
                     self::USERNAME => 'Username',
-                    self::USERNAME_LONG =>  "$usernameMinChar-$usernameMaxChar character length",
-                    self::USERNAME_ALLOWED_CHARS =>  "a-Z characters",
+                    self::USERNAME_LONG => "$usernameMinChar-$usernameMaxChar character length",
+                    self::USERNAME_ALLOWED_CHARS => "a-Z characters",
                     self::NAME => 'Name',
-                    self::NAME_LONG =>  "$nameMinChar-$nameMaxChar character length",
+                    self::NAME_LONG => "$nameMinChar-$nameMaxChar character length",
                     self::SURNAME => 'Surname',
-                    self::SURNAME_LONG =>  "$surnameMinChar-$surnameMaxChar character length",
+                    self::SURNAME_LONG => "$surnameMinChar-$surnameMaxChar character length",
                     self::EMAIL => 'E-mail',
                     self::PASSWORD => 'Password',
                     self::PASSWORD_CHECK => 'Password Check',
-                    self::PASSWORD_LONG =>  "$passwordMinChar-$passwordMaxChar character length",
-                    self::PASSWORD_ALLOWED_CHARS =>  "a-Z, 0-9, !@#$%&*()=+.{}- characters",
-                    self::PHONE =>  "Mobile",
+                    self::PASSWORD_LONG => "$passwordMinChar-$passwordMaxChar character length",
+                    self::PASSWORD_ALLOWED_CHARS => "a-Z, 0-9, !@#$%&*()=+.{}- characters",
+                    self::PHONE => "Mobile",
                     self::AGREE_TEXT => 'By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. You may receive SMS notifications from us and can opt out at any time.',
 
                     self::SEARCH => 'Search',
+                    self::SEARCH_RESULT => 'Search Results',
                     self::PROFILE => 'Profile',
                     self::SETTINGS => 'Settings',
 
@@ -186,21 +189,22 @@ enum WebSettings
                     self::LOGOUT => 'выйти',
 
                     self::USERNAME => 'Имя пользователя',
-                    self::USERNAME_LONG =>  "$usernameMinChar-$usernameMaxChar длина символа",
-                    self::USERNAME_ALLOWED_CHARS =>  "a-Z персонажи",
+                    self::USERNAME_LONG => "$usernameMinChar-$usernameMaxChar длина символа",
+                    self::USERNAME_ALLOWED_CHARS => "a-Z персонажи",
                     self::NAME => 'Имя',
-                    self::NAME_LONG =>  "$surnameMinChar-$surnameMaxChar длина символа",
+                    self::NAME_LONG => "$surnameMinChar-$surnameMaxChar длина символа",
                     self::SURNAME => 'Фамилия',
-                    self::SURNAME_LONG =>  "$surnameMinChar-$surnameMaxChar длина символа",
+                    self::SURNAME_LONG => "$surnameMinChar-$surnameMaxChar длина символа",
                     self::EMAIL => 'Эл. адрес',
                     self::PASSWORD => 'Пароль',
                     self::PASSWORD_CHECK => 'Проверка пароля',
-                    self::PASSWORD_LONG =>  "$passwordMinChar-$passwordMaxChar длина символа",
-                    self::PASSWORD_ALLOWED_CHARS =>  "a-Z, 0-9, !@#$%&*()=+.{}- персонажи",
-                    self::PHONE =>  "Телефон",
+                    self::PASSWORD_LONG => "$passwordMinChar-$passwordMaxChar длина символа",
+                    self::PASSWORD_ALLOWED_CHARS => "a-Z, 0-9, !@#$%&*()=+.{}- персонажи",
+                    self::PHONE => "Телефон",
                     self::AGREE_TEXT => 'Нажимая «Зарегистрироваться», вы соглашаетесь с нашими Условиями, Политикой данных и Политикой использования файлов cookie. Вы можете получать от нас SMS-уведомления и в любой момент можете отказаться от них.',
 
                     self::SEARCH => 'Поиск',
+                    self::SEARCH_RESULT => 'результаты поиска',
                     self::PROFILE => 'Профиль',
                     self::SETTINGS => 'Настройки',
 

@@ -36,10 +36,13 @@ class Builder extends DB
         return $this;
     }
 
-    public function search($column)
+    public function search($match, array $where)
     {
+        $identifierElements = "";
+        foreach ($where as $column => $value)
+            $identifierElements .= "$column = $value AND";
         $this->operation = self::SEARCH;
-        $this->query .= "SELECT * FROM $this->table WHERE MATCH(`$column`) AGAINST(:search IN BOOLEAN MODE)";
+        $this->query .= "SELECT * FROM $this->table WHERE $identifierElements MATCH(`$match`) AGAINST(:search IN BOOLEAN MODE)";
         return $this;
     }
 

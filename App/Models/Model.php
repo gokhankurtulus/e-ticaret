@@ -81,11 +81,11 @@ abstract class Model
      * @param $text
      * @return mixed
      */
-    public static function search($column, $search_text): mixed
+    public static function search(string $column, string $search_text, array $where = []): mixed
     {
         $query = new Builder();
         $query->table = static::getTable();
-        $result = $query->search($column)->execute(params: [':search' => "+$search_text*"], fetch: 'fetchAll');
+        $result = $query->search($column, $where)->execute(params: [':search' => "+$search_text*"], fetch: 'fetchAll');
         $result = self::loadFromResult($result);
         return $result;
     }

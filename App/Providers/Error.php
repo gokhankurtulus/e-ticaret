@@ -22,6 +22,7 @@ enum Error
     case NOT_EMAIL;
     case NOT_FORMATTED_PHONE;
     case NOT_ID;
+    case NOT_SLUG;
     case NOT_OBJECT;
 
     case USER_NOT_FOUND;
@@ -31,6 +32,10 @@ enum Error
     case USERNAME_EXIST;
     case PASSIVE_ACCOUNT;
     case BANNED;
+
+    case CATEGORY_NOT_FOUND;
+
+    case PRODUCT_NOT_FOUND;
 
     case NOTHING_CHANGED;
     case UPDATE_FAILED;
@@ -56,6 +61,7 @@ enum Error
             self::NOT_EMAIL => 'Mail standartları karşılamıyor',
             self::NOT_FORMATTED_PHONE => 'Telefon numarası istenilen standartları karşılamıyor',
             self::NOT_ID => 'ID değil',
+            self::NOT_SLUG => 'Slug değil',
             self::NOT_OBJECT => 'Obje değil',
 
             self::USER_NOT_FOUND => 'Kullanıcı bulunamadı',
@@ -65,6 +71,10 @@ enum Error
             self::USERNAME_EXIST => 'Kullanıcı adı mevcut',
             self::PASSIVE_ACCOUNT => 'Pasif hesap',
             self::BANNED => 'Kullanıcı yasaklı',
+
+            self::CATEGORY_NOT_FOUND => 'Kategori bulunamadı',
+
+            self::PRODUCT_NOT_FOUND => 'Ürün bulunamadı',
 
             self::NOTHING_CHANGED => 'Değerler aynı olduğu için değişiklik yapılmadı',
             self::UPDATE_FAILED => 'Update false döndürdü'

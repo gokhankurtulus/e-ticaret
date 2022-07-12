@@ -11,6 +11,9 @@ class Category extends Model
     private $ruName;
     private $slug;
     private $parent;
+    private $isRoot;
+    private $isChild;
+    private $isSub;
     private $status;
     private $created_at;
     private $updated_at;
@@ -35,6 +38,9 @@ class Category extends Model
             $this->enName = $resource['en_name'];
             $this->ruName = $resource['ru_name'];
             $this->parent = $resource['parent'];
+            $this->isRoot = $resource['isRoot'];
+            $this->isChild = $resource['isChild'];
+            $this->isSub = $resource['isSub'];
             $this->slug = $resource['slug'];
             $this->status = $resource['status'];
             $this->created_at = $resource['created_at'];
@@ -113,6 +119,21 @@ class Category extends Model
     public function getParent()
     {
         return $this->parent;
+    }
+
+    public function getIsRoot()
+    {
+        return $this->isRoot;
+    }
+
+    public function getIsChild()
+    {
+        return $this->isChild;
+    }
+
+    public function getIsSub()
+    {
+        return $this->isSub;
     }
 
     public function getStatus()

@@ -25,6 +25,8 @@ class User extends Model
 
     private $city;
     private $fullAddress;
+    private $created_at;
+    private $updated_at;
 
     protected static function getTable()
     {
@@ -54,6 +56,8 @@ class User extends Model
             $this->birthDate = $resource['birth'];
             $this->city = $resource['city'];
             $this->fullAddress = $resource['address'];
+            $this->created_at = $resource['created_at'];
+            $this->updated_at = $resource['updated_at'];
             if ($this->birthDate)
                 $this->parseBirthDate();
             return true;
@@ -176,6 +180,16 @@ class User extends Model
     public function getFullAddress()
     {
         return $this->fullAddress;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
     }
 }
 
