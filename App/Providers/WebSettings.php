@@ -58,7 +58,7 @@ enum WebSettings
 
     public function name($language = 'tr')
     {
-        if (in_array($language, $GLOBALS['allowed_languages'])) {
+        if (in_array($language, $GLOBALS['allowed_languages_code'])) {
             $usernameMinChar = UserSettings::UsernameMinChar;
             $usernameMaxChar = UserSettings::UsernameMaxChar;
             $passwordMinChar = UserSettings::PasswordMinChar;

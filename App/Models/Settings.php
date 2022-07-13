@@ -91,7 +91,7 @@ class Settings extends Model
 
     public function getWorkingDateByLanguage(string $language)
     {
-        if (in_array($language, $GLOBALS['allowed_languages'])) {
+        if (in_array($language, $GLOBALS['allowed_languages_code'])) {
             if ($language === 'tr')
                 return $this->tr_working_date;
             else if ($language === 'en')

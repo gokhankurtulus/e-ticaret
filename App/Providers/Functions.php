@@ -84,8 +84,8 @@ class Functions
         return $type . $discount;
     }
 
-    public static function showPrice($money_str, $type)
+    public static function showPrice($money_str, $currency)
     {
-        return number_format($money_str, 2, ',', '.') . ' ' . $type;
+        return number_format($money_str, 2, ',', '.') . ' ' . $currency;
     }
 }

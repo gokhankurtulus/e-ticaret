@@ -24,11 +24,20 @@ class Provider
             }
         });
         $GLOBALS['default_language'] = 'en';
-        $GLOBALS['allowed_languages'] = ['tr', 'en', 'ru'];
+        $GLOBALS['allowed_languages'] =
+            [
+                ['code' => 'tr', 'name' => 'Türkçe'],
+                ['code' => 'en', 'name' => 'English'],
+                ['code' => 'ru', 'name' => 'Русский']
+            ];
+        foreach ($GLOBALS['allowed_languages'] as $lang) {
+            $GLOBALS['allowed_languages_code'][] = $lang['code'];
+            $GLOBALS['allowed_languages_name'][] = $lang['name'];
+        }
 
         $GLOBALS['route'] = new Route;
         $GLOBALS['route']->get();
-        if (!in_array($GLOBALS['route']->getLanguage(), $GLOBALS['allowed_languages'])) {
+        if (!in_array($GLOBALS['route']->getLanguage(), $GLOBALS['allowed_languages_code'])) {
             $countryCode = strtolower(ip_info(purpose: "Country Code"));
             if (in_array($countryCode, $GLOBALS['allowed_languages'])) {
                 header("Location: " . self::BASEURL . $countryCode);
