@@ -15,7 +15,7 @@ class RegisterController extends Controller
 
         $status = self::middleware(ValidateRegisterCredentials::class, $credentials);
         if ($status === Error::SUCCESS) {
-            $checkExist = User::get(where: ['username' => $credentials['username'], 'mail' => $credentials['mail']], operator: 'OR');
+            $checkExist = User::getAll(where: ['username' => $credentials['username'], 'mail' => $credentials['mail']], operator: 'OR');
             if ($checkExist)
                 return Error::USER_EXIST;
             else {

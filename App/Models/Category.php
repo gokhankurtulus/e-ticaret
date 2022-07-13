@@ -52,7 +52,7 @@ class Category extends Model
 
     public static function tree($where = [])
     {
-        $allCategories = Category::get(where: $where);
+        $allCategories = Category::getAll(where: $where);
         foreach ($allCategories as $category) {
             if ($category->getParent() === NULL)
                 $rootCategories[] = $category;
@@ -100,7 +100,7 @@ class Category extends Model
 
     public function getNameByLanguage(string $language)
     {
-        if (in_array($language, $GLOBALS['allowed_languages'])) {
+        if (in_array($language, $GLOBALS['allowed_languages_code'])) {
             if ($language === 'tr')
                 return $this->trName;
             else if ($language === 'en')

@@ -29,6 +29,19 @@ class UserController extends Controller
             return $response;
     }
 
+    public static function getAll($where = [], $operator = 'AND')
+    {
+        $response = self::middleware(GetUserMiddleware::class, $where);
+        if ($response === Error::SUCCESS) {
+            $user = User::getAll(where: $where, operator: $operator);
+            if (isset($user) && is_object($user))
+                return $user;
+            else
+                return Error::USER_NOT_FOUND;
+        } else
+            return $response;
+    }
+
     public static function search($column, $search_text)
     {
         if (!Functions::isLettersWithWhitespace($column))

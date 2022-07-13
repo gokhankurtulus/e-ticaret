@@ -22,6 +22,18 @@ class ProductController extends Controller
         } else
             return $status;
     }
+    public static function getAll($where = [], $operator = 'AND')
+    {
+        $status = self::middleware(ValidateGetProduct::class, $where);
+        if ($status === Error::SUCCESS) {
+            $product = Product::getAll(where: $where, operator: $operator);
+            if ($product) //TODO check here
+                return $product;
+            else
+                return Error::PRODUCT_NOT_FOUND;
+        } else
+            return $status;
+    }
 
     public static function search($column, $search_text, $where = [])
     {

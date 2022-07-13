@@ -10,7 +10,7 @@ class CheckUsernameExist
 
     public static function handle($request)
     {
-        $checkExist = User::get(where: ['username' => $request['username']]);
+        $checkExist = User::getAll(where: ['username' => $request['username']]);
         return $checkExist ? Error::USERNAME_EXIST : Error::SUCCESS;
     }
 

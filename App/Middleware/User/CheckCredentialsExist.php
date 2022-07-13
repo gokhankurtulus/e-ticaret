@@ -11,7 +11,7 @@ class CheckCredentialsExist
 
     public static function handle($request)
     {
-        $checkExist = User::get(where: ['username' => $request['username'], 'mail' => $request['mail']], operator: 'OR');
+        $checkExist = User::getAll(where: ['username' => $request['username'], 'mail' => $request['mail']], operator: 'OR');
         if ($checkExist)
             return Error::USER_EXIST;
         else

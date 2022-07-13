@@ -49,23 +49,34 @@ abstract class Model
         $query->table = static::getTable();
         if ($where != []) $result = $query->get()->where($columns, $operator)->execute(params: $values, fetch: $fetch);
         if ($where == []) $result = $query->get()->execute(fetch: $fetch);
-        $result = self::loadFromResult($result);
-        return $result;
-    }
-
-    /**
-     * @param $result
-     * @return mixed
-     */
-    public static function loadFromResult($result): mixed
-    {
         if (count($result) == 1) {
             $newClass = new (static::getClass());
             $newClass->load($result[0]);
             return $newClass;
         }
+        return false;
+    }
+
+    /**
+     * @param $where
+     * @param $operator
+     * @param $fetch
+     * @return mixed
+     */
+    public static function getAll($where = [], $operator = "AND", $fetch = 'fetchAll'): mixed
+    {
+        $columns = [];
+        $values = [];
+        foreach ($where as $column => $value) {
+            $columns[] = $column;
+            $values[] = $value;
+        }
+        $query = new Builder();
+        $query->table = static::getTable();
+        if ($where != []) $result = $query->get()->where($columns, $operator)->execute(params: $values, fetch: $fetch);
+        if ($where == []) $result = $query->get()->execute(fetch: $fetch);
         $classArray = [];
-        if (count($result) > 1) {
+        if (count($result)) {
             foreach ($result as $resource) {
                 $newClass = new (static::getClass());
                 $newClass->load($resource);
@@ -86,8 +97,16 @@ abstract class Model
         $query = new Builder();
         $query->table = static::getTable();
         $result = $query->search($column, $where)->execute(params: [':search' => "+$search_text*"], fetch: 'fetchAll');
-        $result = self::loadFromResult($result);
-        return $result;
+        $classArray = [];
+        if (count($result)) {
+            foreach ($result as $resource) {
+                $newClass = new (static::getClass());
+                $newClass->load($resource);
+                $classArray[$newClass->getID()] = $newClass;
+            }
+            return $classArray;
+        }
+        return false;
     }
 
     /**

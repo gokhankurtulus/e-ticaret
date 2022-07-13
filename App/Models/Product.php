@@ -99,7 +99,7 @@ class Product extends Model
 
     public function getNameByLanguage(string $language)
     {
-        if (in_array($language, $GLOBALS['allowed_languages'])) {
+        if (in_array($language, $GLOBALS['allowed_languages_code'])) {
             if ($language === 'tr')
                 return $this->trName;
             else if ($language === 'en')
