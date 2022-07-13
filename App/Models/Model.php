@@ -63,7 +63,7 @@ abstract class Model
      * @param $fetch
      * @return mixed
      */
-    public static function getAll($where = [], $operator = "AND", $fetch = 'fetchAll'): mixed
+    public static function getAll($where = [], $operator = "AND", $fetch = 'fetchAll', $order = ''): mixed
     {
         $columns = [];
         $values = [];
@@ -73,8 +73,8 @@ abstract class Model
         }
         $query = new Builder();
         $query->table = static::getTable();
-        if ($where != []) $result = $query->get()->where($columns, $operator)->execute(params: $values, fetch: $fetch);
-        if ($where == []) $result = $query->get()->execute(fetch: $fetch);
+        if ($where != []) $result = $query->get()->where($columns, $operator)->order($order)->execute(params: $values, fetch: $fetch);
+        if ($where == []) $result = $query->get()->order($order)->execute(fetch: $fetch);
         $classArray = [];
         if (count($result)) {
             foreach ($result as $resource) {
@@ -107,6 +107,21 @@ abstract class Model
             return $classArray;
         }
         return false;
+    }
+
+    public static function count($where = [], $operator = "AND", $fetch = 'fetchColumn', $order = ''): mixed
+    {
+        $columns = [];
+        $values = [];
+        foreach ($where as $column => $value) {
+            $columns[] = $column;
+            $values[] = $value;
+        }
+        $query = new Builder();
+        $query->table = static::getTable();
+        if ($where != []) $result = $query->count()->where($columns, $operator)->order($order)->execute(params: $values, fetch: $fetch);
+        if ($where == []) $result = $query->count()->order($order)->execute(fetch: $fetch);
+        return $result;
     }
 
     /**

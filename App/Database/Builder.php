@@ -42,7 +42,13 @@ class Builder extends DB
         foreach ($where as $column => $value)
             $identifierElements .= "$column = $value AND";
         $this->operation = self::SEARCH;
-        $this->query .= "SELECT * FROM $this->table WHERE $identifierElements MATCH(`$match`) AGAINST(:search IN BOOLEAN MODE)";
+        $this->query .= "SELECT * FROM $this->table WHERE $identifierElements MATCH($match) AGAINST(:search IN BOOLEAN MODE)";
+        return $this;
+    }
+
+    public function count($keywords = "*")
+    {
+        $this->query .= "SELECT COUNT($keywords) FROM $this->table";
         return $this;
     }
 
@@ -90,6 +96,12 @@ class Builder extends DB
         return $this;
     }
 
+    public function order(string $order)
+    {
+        $this->query .= " $order ";
+        return $this;
+    }
+
 
     public function execute($params = [], $fetch = null, $lastInsertID = false)
     {
@@ -101,6 +113,8 @@ class Builder extends DB
             $this->pdo = $this->pdo->fetchAll();
         if ($fetch == "fetchObject")
             $this->pdo = $this->pdo->fetchObject();
+        if ($fetch == "fetchColumn")
+            $this->pdo = $this->pdo->fetchColumn();
         return !$lastInsertID ? $this->pdo : $this->_db->lastInsertId();
     }
 }

@@ -33,9 +33,15 @@ enum Link: string
     case CATEGORY = "category";
     case PRODUCT = "product";
 
+    case SORT_PRICE_ASC = "price-asc";
+    case SORT_PRICE_DESC = "price-desc";
+    case SORT_DATE_ASC = "date-asc";
+    case SORT_DATE_DESC = "date-desc";
+
 
     case PANEL_BASE = 'panel/';
     case PANEL_SEARCH = "panel/search";
+    case PANEL_CATEGORY = "panel/category";
 
     public function url(string $slug = '', string $language = 'tr'): string
     {
@@ -68,9 +74,15 @@ enum Link: string
             self::CATEGORY => Provider::BASEURL . "$language/category/$slug",
             self::PRODUCT => Provider::BASEURL . "$language/product/$slug",
 
+            self::SORT_PRICE_ASC => self::CATEGORY->url($slug, $language) . "/price-asc/",
+            self::SORT_PRICE_DESC => self::CATEGORY->url($slug, $language) . "/price-desc/",
+            self::SORT_DATE_ASC => self::CATEGORY->url($slug, $language) . "/date-asc/",
+            self::SORT_DATE_DESC => self::CATEGORY->url($slug, $language) . "/date-desc/",
+
 
             self::PANEL_BASE => Provider::BASEURL . "$language/panel/",
-            self::PANEL_SEARCH => Provider::BASEURL . "$language/panel/search",
+            self::PANEL_SEARCH => self::PANEL_BASE->url() . "search",
+            self::PANEL_CATEGORY => self::PANEL_BASE->url() . "edit-category/$slug",
         };
     }
 }

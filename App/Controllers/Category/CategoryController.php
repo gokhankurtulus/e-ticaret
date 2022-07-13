@@ -21,11 +21,12 @@ class CategoryController extends Controller
         } else
             return $status;
     }
-    public static function getAll($where = [], $operator = 'AND')
+
+    public static function getAll($where = [], $operator = 'AND', $order = '')
     {
         $status = self::middleware(ValidateGetCategory::class, $where);
         if ($status === Error::SUCCESS) {
-            $category = Category::getAll(where: $where, operator: $operator);
+            $category = Category::getAll(where: $where, operator: $operator, order: $order);
             if (!is_null($category)) //TODO check here
                 return $category;
             else

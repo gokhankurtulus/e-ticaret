@@ -32,6 +32,7 @@ enum WebSettings
 
     case SEARCH;
     case SEARCH_RESULT;
+
     case PROFILE;
     case SETTINGS;
 
@@ -39,6 +40,17 @@ enum WebSettings
     case SUBSCRIBE_MESSAGE;
 
     case CHANGE_LANGUAGE;
+
+    case SORT_BY;
+
+    case SORT_PRICE_ASC;
+    case SORT_PRICE_DESC;
+    case SORT_DATE_ASC;
+    case SORT_DATE_DESC;
+
+    case DASHBOARD;
+    case PAGES;
+    case CATEGORIES;
 
     case HELP;
     case FAQ;
@@ -104,6 +116,16 @@ enum WebSettings
                     self::SUBSCRIBE_MESSAGE => 'Bültene abone olarak en yeni ürünler, indirimler ve fırsatlardan ilk siz haberdar olabilirsiniz.',
                     self::CHANGE_LANGUAGE => 'Dili Değiştir',
 
+                    self::SORT_BY => 'Sıralama',
+                    self::SORT_PRICE_ASC => 'Artan Fiyat',
+                    self::SORT_PRICE_DESC => 'Azalan Fiyat',
+                    self::SORT_DATE_ASC => 'Eskiden Yeniye',
+                    self::SORT_DATE_DESC => 'Yeniden Eskiye',
+
+                    self::DASHBOARD => 'Dashboard',
+                    self::PAGES => 'Sayfalar',
+                    self::CATEGORIES => 'Kategoriler',
+
                     self::HELP => 'Yardım',
                     self::FAQ => 'Sıkça Sorulan Sorular',
                     self::REFUND => 'İade ve Değişim',
@@ -156,6 +178,16 @@ enum WebSettings
                     self::SUBSCRIBE => 'Subscribe',
                     self::SUBSCRIBE_MESSAGE => 'By subscribing to the newsletter, you can be the first to know about the latest products, discounts and opportunities.',
                     self::CHANGE_LANGUAGE => 'Change Language',
+
+                    self::SORT_BY => 'Sort By',
+                    self::SORT_PRICE_ASC => 'Price Low to High',
+                    self::SORT_PRICE_DESC => 'Price High to Low',
+                    self::SORT_DATE_ASC => 'The Oldest',
+                    self::SORT_DATE_DESC => 'The Newest',
+
+                    self::DASHBOARD => 'Dashboard',
+                    self::PAGES => 'Pages',
+                    self::CATEGORIES => 'Categories',
 
                     self::HELP => 'Help',
                     self::FAQ => 'FAQ',
@@ -211,6 +243,16 @@ enum WebSettings
                     self::SUBSCRIBE => 'Подписывайся',
                     self::SUBSCRIBE_MESSAGE => 'Подписавшись на рассылку, вы сможете первыми узнавать о новинках, скидках и возможностях.',
                     self::CHANGE_LANGUAGE => 'Изменить язык',
+
+                    self::SORT_BY => 'Сортировать по',
+                    self::SORT_PRICE_ASC => 'Цена от низкой до высокой',
+                    self::SORT_PRICE_DESC => 'Цена от высокой к низкой',
+                    self::SORT_DATE_ASC => 'Старейший',
+                    self::SORT_DATE_DESC => 'Новейший',
+
+                    self::DASHBOARD => 'приборная доска',
+                    self::PAGES => 'страницы',
+                    self::CATEGORIES => 'категории',
 
                     self::HELP => 'Помощь',
                     self::FAQ => 'Часто задаваемые вопросы',
