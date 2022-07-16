@@ -12,6 +12,7 @@ enum Error
     case TR_LETTERS_WITH_WHITESPACE;
     case AUTH_TYPE_MISSING;
     case FORM_PARAMETER_MISSING;
+    case ID_MISSING;
 
     case NOT_ALLOWED_SEARCH;
     case NOT_ALLOWED_USERNAME;
@@ -34,6 +35,8 @@ enum Error
     case BANNED;
 
     case CATEGORY_NOT_FOUND;
+    case CODE_START_EXIST;
+    case SLUG_EXIST;
 
     case PRODUCT_NOT_FOUND;
 
@@ -51,6 +54,7 @@ enum Error
             self::TR_LETTERS_WITH_WHITESPACE => 'Yanlızca türkçe karakter ve boşluk içerebilir',
             self::AUTH_TYPE_MISSING => 'Authentication type bulunamadı',
             self::FORM_PARAMETER_MISSING => 'Form parametreleri eksik',
+            self::ID_MISSING => 'ID yok',
 
             self::NOT_ALLOWED_SEARCH => 'Arama istenilen biçimde değil',
             self::NOT_ALLOWED_USERNAME => 'Kullanıcı adı istenilen biçimde değil',
@@ -73,6 +77,8 @@ enum Error
             self::BANNED => 'Kullanıcı yasaklı',
 
             self::CATEGORY_NOT_FOUND => 'Kategori bulunamadı',
+            self::CODE_START_EXIST => 'Ürün başlangıç kodu mevcut',
+            self::SLUG_EXIST => 'Slug mevcut',
 
             self::PRODUCT_NOT_FOUND => 'Ürün bulunamadı',
 

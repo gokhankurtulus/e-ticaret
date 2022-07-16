@@ -6,6 +6,7 @@ class Category extends Model
     protected static $table = 'categories';
     private $id;
     private $name;
+    private $code;
     private $trName;
     private $enName;
     private $ruName;
@@ -34,6 +35,7 @@ class Category extends Model
         if (!empty($resource)) {
             $this->id = $resource['id'];
             $this->name = $resource['name'];
+            $this->code = $resource['code'];
             $this->trName = $resource['tr_name'];
             $this->enName = $resource['en_name'];
             $this->ruName = $resource['ru_name'];
@@ -81,6 +83,11 @@ class Category extends Model
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getCode()
+    {
+        return $this->code;
     }
 
     public function getTrName()

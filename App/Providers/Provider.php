@@ -23,7 +23,7 @@ class Provider
                 require_once($class . '.php');
             }
         });
-        $GLOBALS['default_language'] = 'en';
+        $GLOBALS['default_language'] = 'tr';
         $GLOBALS['allowed_languages'] =
             [
                 ['code' => 'tr', 'name' => 'Türkçe'],

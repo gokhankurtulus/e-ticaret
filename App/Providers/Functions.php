@@ -88,4 +88,18 @@ class Functions
     {
         return number_format($money_str, 2, ',', '.') . ' ' . $currency;
     }
+    public static function change_meta_tags($title, $keywords, $description)
+    {
+
+        $output = ob_get_contents();
+        if (ob_get_length() > 0) {
+            ob_end_clean();
+        }
+
+        $patterns = array("/<title>(.*?)<\/title>/", "/<meta name=\"keywords\" content=\"(.*?)\"\/>/", "/<meta name=\"description\" content=\"(.*?)\"\/>/");
+        $replacements = array("<title>$title</title>", "<meta name=\"keywords\" content=\"$keywords\" />", "<meta name=\"description\" content=\"$description\" />");
+
+        $output = preg_replace($patterns, $replacements, $output);
+        echo $output;
+    }
 }

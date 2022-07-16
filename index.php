@@ -1,6 +1,7 @@
 <?php
 error_reporting(1);
 session_start();
+ob_start();
 
 if (isset($_REQUEST['logout']))
     unset($_SESSION['login']);
